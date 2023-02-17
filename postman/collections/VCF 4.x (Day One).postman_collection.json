@@ -1,0 +1,765 @@
+{
+	"info": {
+		"_postman_id": "ab138d13-225f-412d-abb4-3ab9bfb67f59",
+		"name": "VCF 4.x (Day One)",
+		"description": "VMware vRealize Life Cycle Manager Public API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12242778"
+	},
+	"item": [
+		{
+			"name": "CloudBuilder",
+			"item": [
+				{
+					"name": "(1) Deploy SDDC JSON",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"skipEsxThumbprintValidation\": true,\n  \"managementPoolName\": \"{{np1_mgmt}}\",\n  \"sddcManagerSpec\": {\n    \"secondUserCredentials\": {\n      \"username\": \"vcf\",\n      \"password\": \"{{complex_password}}\"\n    },\n    \"ipAddress\": \"{{sddcm_ip}}\",\n    \"netmask\": \"{{sddcm_subnet}}\",\n    \"hostname\": \"{{sddcm_host_short}}\",\n    \"licenseKey\": \"{{sddcm_licensekey}}\",\n    \"rootUserCredentials\": {\n      \"username\": \"root\",\n      \"password\": \"{{simple_password}}\"\n    },\n    \"localUserPassword\": \"{{complex_password}}\",\n    \"vcenterId\": \"{{mgmt_vc_id}}\"\n  },\n  \"sddcId\": \"{{sddcm_sddcid}}\",\n  \"esxLicense\": \"{{esxi_license}}\",\n  \"taskName\": \"workflowconfig/workflowspec-ems.json\",\n  \"ceipEnabled\": \"{{set_ceip}}\",\n  \"fipsEnabled\": \"{{set_fips}}\",\n  \"ntpServers\": [\"{{ntps_primary}}\", \"{{ntps_secondary}}\"],\n  \"dnsSpec\": {\n    \"secondaryNameserver\": \"{{dns_secondaryns}}\",\n    \"subdomain\": \"{{dns_subdomain}}\",\n    \"domain\": \"{{dns_domainname}}\",\n    \"nameserver\": \"{{dns_primaryns}}\"\n  },\n  \"networkSpecs\": [\n    {\n      \"networkType\": \"MANAGEMENT\",\n      \"subnet\": \"{{net_mgmt_subnet}}\",\n      \"gateway\": \"{{net_mgmt_gateway}}\",\n      \"vlanId\": \"{{net_mgmt_vlan}}\",\n      \"mtu\": \"{{net_mgmt_mtu}}\",\n      \"portGroupKey\": \"{{net_mgmt_pg_name}}\",\n      \"standbyUplinks\":[],\n      \"activeUplinks\":[\n        \"uplink1\",\n        \"uplink2\"\n      ]\n    },\n    {\n      \"networkType\": \"VMOTION\",\n      \"subnet\": \"{{net_vmotion_subnet}}\",\n      \"gateway\": \"{{net_vmotion_gateway}}\",\n      \"vlanId\": \"{{net_vmotion_vlanid}}\",\n      \"mtu\": \"{{net_vmotion_mtu}}\",\n      \"portGroupKey\": \"{{net_vmotion_pg_name}}\",\n      \"association\": \"{{vc_datacenter_name}}\",\n      \"includeIpAddressRanges\": [{\"endIpAddress\": \"{{net_vmotion_ipend}}\", \"startIpAddress\": \"{{net_vmotion_ipstart}}\"}],\n      \"standbyUplinks\":[],\n      \"activeUplinks\":[\n        \"uplink1\",\n        \"uplink2\"\n      ]\n    },\n    {\n      \"networkType\": \"VSAN\",\n      \"subnet\": \"{{net_vsan_subnet}}\",\n      \"gateway\": \"{{net_vsan_gateway}}\",\n      \"vlanId\": \"{{net_vsan_vlanid}}\",\n      \"mtu\": \"{{net_vsan_mtu}}\",\n      \"portGroupKey\": \"{{net_vsan_pg_name}}\",\n      \"includeIpAddressRanges\": [{\"endIpAddress\": \"{{net_vsan_ipend}}\", \"startIpAddress\": \"{{net_vsan_ipstart}}\"}],\n      \"standbyUplinks\":[],\n      \"activeUplinks\":[\n        \"uplink1\",\n        \"uplink2\"\n      ]\n    }\n  ],\n  \"nsxtSpec\":\n  {\n    \"nsxtManagerSize\": \"{{nsxt_m_size}}\",\n    \"nsxtManagers\": [\n      {\n          \"hostname\": \"{{nsxt_m1_hostname_short}}\",\n          \"ip\": \"{{nsxt_m1_ip}}\"\n      },\n      {\n          \"hostname\": \"{{nsxt_m2_hostname_short}}\",\n          \"ip\": \"{{nsxt_m2_ip}}\"\n      },\n      {\n          \"hostname\": \"{{nsxt_m3_hostname_short}}\",\n          \"ip\": \"{{nsxt_m3_ip}}\"\n      }\n    ],\n    \"rootNsxtManagerPassword\": \"{{complex_password}}\",\n    \"nsxtAdminPassword\": \"{{complex_password}}\",\n    \"nsxtAuditPassword\": \"{{complex_password}}\",\n    \"rootLoginEnabledForNsxtManager\": \"true\",\n    \"sshEnabledForNsxtManager\": \"true\",\n    \"overLayTransportZone\": {\n        \"zoneName\": \"{{nsxt_tz_overlayname}}\",\n        \"networkName\": \"{{nsxt_tz_overlaynetworkname}}\"\n    },\n    \"vlanTransportZone\": {\n        \"zoneName\": \"{{nsxt_tz_vlanname}}\",\n        \"networkName\": \"{{nsxt_tz_vlannetworkname}}\"\n    },\n    \"vip\": \"{{nsxt_vip_name}}\",\n    \"vipFqdn\": \"{{nsxt_vip_fqdn}}\",\n    \"nsxtLicense\": \"{{nsxt_licensekey}}\",\n    \"transportVlanId\": \"{{nsxt_htep_vlanid}}\",\n    \"ipAddressPoolSpec\": {\n       \"name\": \"{{nsxt_np2_htep_name}}\",\n       \"description\": \"{{nsxt_np2_htep_desc}}\",\n       \"subnets\":[\n          {\n             \"ipAddressPoolRanges\":[\n                {\n                   \"start\": \"{{net_htep_ipstart}}\",\n                   \"end\": \"{{net_htep_ipend}}\"\n                }\n             ],\n             \"cidr\": \"{{net_htep_cidr}}\",\n             \"gateway\": \"{{net_htep_gateway}}\"\n          }\n       ]\n    }\n  },\n  \"vsanSpec\": {\n      \"vsanName\": \"{{vsan_spec_name}}\",\n      \"licenseFile\": \"{{vsan_licensekey}}\",\n      \"vsanDedup\": \"{{set_vsan_dedupe}}\",\n      \"datastoreName\": \"{{vsan_dsname}}\"\n  },\n  \"dvSwitchVersion\": \"{{vds1_version}}\",\n  \"dvsSpecs\": [\n    {\n      \"dvsName\": \"{{vds1_dvsname}}\",\n      \"vcenterId\":\"{{vds1_vcenterid}}\",\n      \"vmnics\": [\n        \"{{vds1_pnic1}}\",\n        \"{{vds1_pnic2}}\"\n      ],\n      \"mtu\": \"{{vds1_mtu}}\",\n      \"networks\":[\n        \"MANAGEMENT\",\n        \"VMOTION\",\n        \"VSAN\"\n      ],\n      \"niocSpecs\":[\n        {\n          \"trafficType\":\"VSAN\",\n          \"value\":\"HIGH\"\n        },\n        {\n          \"trafficType\":\"VMOTION\",\n          \"value\":\"LOW\"\n        },\n        {\n          \"trafficType\":\"VDP\",\n          \"value\":\"LOW\"\n        },\n        {\n          \"trafficType\":\"VIRTUALMACHINE\",\n          \"value\":\"HIGH\"\n        },\n        {\n          \"trafficType\":\"MANAGEMENT\",\n          \"value\":\"NORMAL\"\n        },\n        {\n          \"trafficType\":\"NFS\",\n          \"value\":\"LOW\"\n        },\n        {\n          \"trafficType\":\"HBR\",\n          \"value\":\"LOW\"\n        },\n        {\n          \"trafficType\":\"FAULTTOLERANCE\",\n          \"value\":\"LOW\"\n        },\n        {\n          \"trafficType\":\"ISCSI\",\n          \"value\":\"LOW\"\n        }\n      ],\n      \"isUsedByNsxt\": \"{{vds1_set_isnsxt}}\"\n    }\n  ],\n  \"clusterSpec\":\n  {\n    \"clusterName\": \"{{vc_mgmt_clustername}}\",\n    \"vcenterName\": \"{{vc_spec_name}}\",\n    \"clusterEvcMode\": \"{{vc_evcmode}}\",\n    \"vmFolders\": {\n      \"MANAGEMENT\": \"{{vmfolder_mgmt}}\",\n      \"NETWORKING\": \"{{vmfolder_net}}\",\n      \"EDGENODES\": \"{{vmfolder_edge}}\"\n    },\n    \"resourcePoolSpecs\": [{\n      \"name\": \"{{rp_sddc_mgmt}}\",\n      \"type\": \"management\",\n      \"cpuReservationPercentage\": 0,\n      \"cpuLimit\": -1,\n      \"cpuReservationExpandable\": true,\n      \"cpuSharesLevel\": \"normal\",\n      \"cpuSharesValue\": 0,\n      \"memoryReservationMb\": 0,\n      \"memoryLimit\": -1,\n      \"memoryReservationExpandable\": true,\n      \"memorySharesLevel\": \"normal\",\n      \"memorySharesValue\": 0\n    }, {\n      \"name\": \"{{rp_sddc_edge}}\",\n      \"type\": \"network\",\n      \"cpuReservationPercentage\": 0,\n      \"cpuLimit\": -1,\n      \"cpuReservationExpandable\": true,\n      \"cpuSharesLevel\": \"normal\",\n      \"cpuSharesValue\": 0,\n      \"memoryReservationPercentage\": 0,\n      \"memoryLimit\": -1,\n      \"memoryReservationExpandable\": true,\n      \"memorySharesLevel\": \"normal\",\n      \"memorySharesValue\": 0\n    }, {\n      \"name\": \"{{rp_usr_edge}}\",\n      \"type\": \"compute\",\n      \"cpuReservationPercentage\": 0,\n      \"cpuLimit\": -1,\n      \"cpuReservationExpandable\": true,\n      \"cpuSharesLevel\": \"normal\",\n      \"cpuSharesValue\": 0,\n      \"memoryReservationPercentage\": 0,\n      \"memoryLimit\": -1,\n      \"memoryReservationExpandable\": true,\n      \"memorySharesLevel\": \"normal\",\n      \"memorySharesValue\": 0\n    }, {\n      \"name\": \"{{rp_usr_vm}}\",\n      \"type\": \"compute\",\n      \"cpuReservationPercentage\": 0,\n      \"cpuLimit\": -1,\n      \"cpuReservationExpandable\": true,\n      \"cpuSharesLevel\": \"normal\",\n      \"cpuSharesValue\": 0,\n      \"memoryReservationPercentage\": 0,\n      \"memoryLimit\": -1,\n      \"memoryReservationExpandable\": true,\n      \"memorySharesLevel\": \"normal\",\n      \"memorySharesValue\": 0\n    }]\n  },\n  \"pscSpecs\": [\n    {\n      \"pscId\": \"{{psc_spec_name}}\",\n      \"vcenterId\": \"{{vc_spec_name}}\",\n      \"adminUserSsoPassword\": \"{{simple_password}}\",\n      \"pscSsoSpec\": {\n        \"ssoDomain\": \"vsphere.local\"\n      }\n    }\n  ],\n  \"vcenterSpec\": {\n      \"vcenterIp\": \"{{vc_mgmt_ip}}\",\n      \"vcenterHostname\": \"{{vc_mgmt_hostname_short}}\",\n      \"vcenterId\": \"{{vc_spec_name}}\",\n      \"licenseFile\": \"{{vc_licensekey}}\",\n      \"vmSize\": \"{{vc_vmsize}}\",\n      \"storageSize\": \"{{vc_storagesize}}\",\n      \"rootVcenterPassword\": \"{{simple_password}}\"\n  },\n  \"hostSpecs\": [\n    {\n      \"association\": \"{{vc_datacenter_name}}\",\n      \"ipAddressPrivate\": {\n        \"ipAddress\": \"{{host1_mgmt_ip}}\"\n      },\n      \"hostname\": \"{{host1_hostname_short}}\",\n      \"credentials\": {\n        \"username\": \"root\",\n        \"password\": \"{{simple_password}}\"\n      },\n      \"vSwitch\": \"{{esxi_vss_name}}\",\n      \"serverId\": \"{{host1_server_id}}\"\n    },\n    {\n      \"association\": \"{{vc_datacenter_name}}\",\n      \"ipAddressPrivate\": {\n        \"ipAddress\": \"{{host2_mgmt_ip}}\"\n      },\n      \"hostname\": \"{{host2_hostname_short}}\",\n      \"credentials\": {\n        \"username\": \"root\",\n        \"password\": \"{{simple_password}}\"\n      },\n      \"vSwitch\": \"{{esxi_vss_name}}\",\n      \"serverId\": \"{{host2_server_id}}\"\n    },\n    {\n      \"association\": \"{{vc_datacenter_name}}\",\n      \"ipAddressPrivate\": {\n        \"ipAddress\": \"{{host3_mgmt_ip}}\"\n      },\n      \"hostname\": \"{{host3_hostname_short}}\",\n      \"credentials\": {\n        \"username\": \"root\",\n        \"password\": \"{{simple_password}}\"\n      },\n      \"vSwitch\": \"{{esxi_vss_name}}\",\n      \"serverId\": \"{{host3_server_id}}\"\n    },\n    {\n      \"association\": \"{{vc_datacenter_name}}\",\n      \"ipAddressPrivate\": {\n        \"ipAddress\": \"{{host4_mgmt_ip}}\"\n      },\n      \"hostname\": \"{{host4_hostname_short}}\",\n      \"credentials\": {\n        \"username\": \"root\",\n        \"password\": \"{{simple_password}}\"\n      },\n      \"vSwitch\": \"{{esxi_vss_name}}\",\n      \"serverId\": \"{{host4_server_id}}\"\n    }\n  ],\n  \"excludedComponents\": [\"AVN\", \"EBGP\"]\n}"
+						},
+						"url": {
+							"raw": "https://{{cb_fqdn}}/v1/sddcs/",
+							"protocol": "https",
+							"host": [
+								"{{cb_fqdn}}"
+							],
+							"path": [
+								"v1",
+								"sddcs",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate SDDC JSON",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"skipEsxThumbprintValidation\": true,\n  \"managementPoolName\": \"{{np1_mgmt}}\",\n  \"sddcManagerSpec\": {\n    \"secondUserCredentials\": {\n      \"username\": \"vcf\",\n      \"password\": \"{{complex_password}}\"\n    },\n    \"ipAddress\": \"{{sddcm_ip}}\",\n    \"netmask\": \"{{sddcm_subnet}}\",\n    \"hostname\": \"{{sddcm_host_short}}\",\n    \"licenseKey\": \"{{sddcm_licensekey}}\",\n    \"rootUserCredentials\": {\n      \"username\": \"root\",\n      \"password\": \"{{simple_password}}\"\n    },\n    \"localUserPassword\": \"{{complex_password}}\",\n    \"vcenterId\": \"{{mgmt_vc_id}}\"\n  },\n  \"sddcId\": \"{{sddcm_sddcid}}\",\n  \"esxLicense\": \"{{esxi_license}}\",\n  \"taskName\": \"workflowconfig/workflowspec-ems.json\",\n  \"ceipEnabled\": \"{{set_ceip}}\",\n  \"fipsEnabled\": \"{{set_fips}}\",\n  \"ntpServers\": [\"{{ntps_primary}}\", \"{{ntps_secondary}}\"],\n  \"dnsSpec\": {\n    \"secondaryNameserver\": \"{{dns_secondaryns}}\",\n    \"subdomain\": \"{{dns_subdomain}}\",\n    \"domain\": \"{{dns_domainname}}\",\n    \"nameserver\": \"{{dns_primaryns}}\"\n  },\n  \"networkSpecs\": [\n    {\n      \"networkType\": \"MANAGEMENT\",\n      \"subnet\": \"{{net_mgmt_subnet}}\",\n      \"gateway\": \"{{net_mgmt_gateway}}\",\n      \"vlanId\": \"{{net_mgmt_vlan}}\",\n      \"mtu\": \"{{net_mgmt_mtu}}\",\n      \"portGroupKey\": \"{{net_mgmt_pg_name}}\",\n      \"standbyUplinks\":[],\n      \"activeUplinks\":[\n        \"uplink1\",\n        \"uplink2\"\n      ]\n    },\n    {\n      \"networkType\": \"VMOTION\",\n      \"subnet\": \"{{net_vmotion_subnet}}\",\n      \"gateway\": \"{{net_vmotion_gateway}}\",\n      \"vlanId\": \"{{net_vmotion_vlanid}}\",\n      \"mtu\": \"{{net_vmotion_mtu}}\",\n      \"portGroupKey\": \"{{net_vmotion_pg_name}}\",\n      \"association\": \"{{vc_datacenter_name}}\",\n      \"includeIpAddressRanges\": [{\"endIpAddress\": \"{{net_vmotion_ipend}}\", \"startIpAddress\": \"{{net_vmotion_ipstart}}\"}],\n      \"standbyUplinks\":[],\n      \"activeUplinks\":[\n        \"uplink1\",\n        \"uplink2\"\n      ]\n    },\n    {\n      \"networkType\": \"VSAN\",\n      \"subnet\": \"{{net_vsan_subnet}}\",\n      \"gateway\": \"{{net_vsan_gateway}}\",\n      \"vlanId\": \"{{net_vsan_vlanid}}\",\n      \"mtu\": \"{{net_vsan_mtu}}\",\n      \"portGroupKey\": \"{{net_vsan_pg_name}}\",\n      \"includeIpAddressRanges\": [{\"endIpAddress\": \"{{net_vsan_ipend}}\", \"startIpAddress\": \"{{net_vsan_ipstart}}\"}],\n      \"standbyUplinks\":[],\n      \"activeUplinks\":[\n        \"uplink1\",\n        \"uplink2\"\n      ]\n    }\n  ],\n  \"nsxtSpec\":\n  {\n    \"nsxtManagerSize\": \"{{nsxt_m_size}}\",\n    \"nsxtManagers\": [\n      {\n          \"hostname\": \"{{nsxt_m1_hostname_short}}\",\n          \"ip\": \"{{nsxt_m1_ip}}\"\n      },\n      {\n          \"hostname\": \"{{nsxt_m2_hostname_short}}\",\n          \"ip\": \"{{nsxt_m2_ip}}\"\n      },\n      {\n          \"hostname\": \"{{nsxt_m3_hostname_short}}\",\n          \"ip\": \"{{nsxt_m3_ip}}\"\n      }\n    ],\n    \"rootNsxtManagerPassword\": \"{{complex_password}}\",\n    \"nsxtAdminPassword\": \"{{complex_password}}\",\n    \"nsxtAuditPassword\": \"{{complex_password}}\",\n    \"rootLoginEnabledForNsxtManager\": \"true\",\n    \"sshEnabledForNsxtManager\": \"true\",\n    \"overLayTransportZone\": {\n        \"zoneName\": \"{{nsxt_tz_overlayname}}\",\n        \"networkName\": \"{{nsxt_tz_overlaynetworkname}}\"\n    },\n    \"vlanTransportZone\": {\n        \"zoneName\": \"{{nsxt_tz_vlanname}}\",\n        \"networkName\": \"{{nsxt_tz_vlannetworkname}}\"\n    },\n    \"vip\": \"{{nsxt_vip_name}}\",\n    \"vipFqdn\": \"{{nsxt_vip_fqdn}}\",\n    \"nsxtLicense\": \"{{nsxt_licensekey}}\",\n    \"transportVlanId\": \"{{nsxt_htep_vlanid}}\",\n    \"ipAddressPoolSpec\": {\n       \"name\": \"{{nsxt_np2_htep_name}}\",\n       \"description\": \"{{nsxt_np2_htep_desc}}\",\n       \"subnets\":[\n          {\n             \"ipAddressPoolRanges\":[\n                {\n                   \"start\": \"{{net_htep_ipstart}}\",\n                   \"end\": \"{{net_htep_ipend}}\"\n                }\n             ],\n             \"cidr\": \"{{net_htep_cidr}}\",\n             \"gateway\": \"{{net_htep_gateway}}\"\n          }\n       ]\n    }\n  },\n  \"vsanSpec\": {\n      \"vsanName\": \"{{vsan_spec_name}}\",\n      \"licenseFile\": \"{{vsan_licensekey}}\",\n      \"vsanDedup\": \"{{set_vsan_dedupe}}\",\n      \"datastoreName\": \"{{vsan_dsname}}\"\n  },\n  \"dvSwitchVersion\": \"{{vds1_version}}\",\n  \"dvsSpecs\": [\n    {\n      \"dvsName\": \"{{vds1_dvsname}}\",\n      \"vcenterId\":\"{{vds1_vcenterid}}\",\n      \"vmnics\": [\n        \"{{vds1_pnic1}}\",\n        \"{{vds1_pnic2}}\"\n      ],\n      \"mtu\": \"{{vds1_mtu}}\",\n      \"networks\":[\n        \"MANAGEMENT\",\n        \"VMOTION\",\n        \"VSAN\"\n      ],\n      \"niocSpecs\":[\n        {\n          \"trafficType\":\"VSAN\",\n          \"value\":\"HIGH\"\n        },\n        {\n          \"trafficType\":\"VMOTION\",\n          \"value\":\"LOW\"\n        },\n        {\n          \"trafficType\":\"VDP\",\n          \"value\":\"LOW\"\n        },\n        {\n          \"trafficType\":\"VIRTUALMACHINE\",\n          \"value\":\"HIGH\"\n        },\n        {\n          \"trafficType\":\"MANAGEMENT\",\n          \"value\":\"NORMAL\"\n        },\n        {\n          \"trafficType\":\"NFS\",\n          \"value\":\"LOW\"\n        },\n        {\n          \"trafficType\":\"HBR\",\n          \"value\":\"LOW\"\n        },\n        {\n          \"trafficType\":\"FAULTTOLERANCE\",\n          \"value\":\"LOW\"\n        },\n        {\n          \"trafficType\":\"ISCSI\",\n          \"value\":\"LOW\"\n        }\n      ],\n      \"isUsedByNsxt\": \"{{vds1_set_isnsxt}}\"\n    }\n  ],\n  \"clusterSpec\":\n  {\n    \"clusterName\": \"{{vc_mgmt_clustername}}\",\n    \"vcenterName\": \"{{vc_spec_name}}\",\n    \"clusterEvcMode\": \"{{vc_evcmode}}\",\n    \"vmFolders\": {\n      \"MANAGEMENT\": \"{{vmfolder_mgmt}}\",\n      \"NETWORKING\": \"{{vmfolder_net}}\",\n      \"EDGENODES\": \"{{vmfolder_edge}}\"\n    },\n    \"resourcePoolSpecs\": [{\n      \"name\": \"{{rp_sddc_mgmt}}\",\n      \"type\": \"management\",\n      \"cpuReservationPercentage\": 0,\n      \"cpuLimit\": -1,\n      \"cpuReservationExpandable\": true,\n      \"cpuSharesLevel\": \"normal\",\n      \"cpuSharesValue\": 0,\n      \"memoryReservationMb\": 0,\n      \"memoryLimit\": -1,\n      \"memoryReservationExpandable\": true,\n      \"memorySharesLevel\": \"normal\",\n      \"memorySharesValue\": 0\n    }, {\n      \"name\": \"{{rp_sddc_edge}}\",\n      \"type\": \"network\",\n      \"cpuReservationPercentage\": 0,\n      \"cpuLimit\": -1,\n      \"cpuReservationExpandable\": true,\n      \"cpuSharesLevel\": \"normal\",\n      \"cpuSharesValue\": 0,\n      \"memoryReservationPercentage\": 0,\n      \"memoryLimit\": -1,\n      \"memoryReservationExpandable\": true,\n      \"memorySharesLevel\": \"normal\",\n      \"memorySharesValue\": 0\n    }, {\n      \"name\": \"{{rp_usr_edge}}\",\n      \"type\": \"compute\",\n      \"cpuReservationPercentage\": 0,\n      \"cpuLimit\": -1,\n      \"cpuReservationExpandable\": true,\n      \"cpuSharesLevel\": \"normal\",\n      \"cpuSharesValue\": 0,\n      \"memoryReservationPercentage\": 0,\n      \"memoryLimit\": -1,\n      \"memoryReservationExpandable\": true,\n      \"memorySharesLevel\": \"normal\",\n      \"memorySharesValue\": 0\n    }, {\n      \"name\": \"{{rp_usr_vm}}\",\n      \"type\": \"compute\",\n      \"cpuReservationPercentage\": 0,\n      \"cpuLimit\": -1,\n      \"cpuReservationExpandable\": true,\n      \"cpuSharesLevel\": \"normal\",\n      \"cpuSharesValue\": 0,\n      \"memoryReservationPercentage\": 0,\n      \"memoryLimit\": -1,\n      \"memoryReservationExpandable\": true,\n      \"memorySharesLevel\": \"normal\",\n      \"memorySharesValue\": 0\n    }]\n  },\n  \"pscSpecs\": [\n    {\n      \"pscId\": \"{{psc_spec_name}}\",\n      \"vcenterId\": \"{{vc_spec_name}}\",\n      \"adminUserSsoPassword\": \"{{simple_password}}\",\n      \"pscSsoSpec\": {\n        \"ssoDomain\": \"vsphere.local\"\n      }\n    }\n  ],\n  \"vcenterSpec\": {\n      \"vcenterIp\": \"{{vc_mgmt_ip}}\",\n      \"vcenterHostname\": \"{{vc_mgmt_hostname_short}}\",\n      \"vcenterId\": \"{{vc_spec_name}}\",\n      \"licenseFile\": \"{{vc_licensekey}}\",\n      \"vmSize\": \"{{vc_vmsize}}\",\n      \"storageSize\": \"{{vc_storagesize}}\",\n      \"rootVcenterPassword\": \"{{simple_password}}\"\n  },\n  \"hostSpecs\": [\n    {\n      \"association\": \"{{vc_datacenter_name}}\",\n      \"ipAddressPrivate\": {\n        \"ipAddress\": \"{{host1_mgmt_ip}}\"\n      },\n      \"hostname\": \"{{host1_hostname_short}}\",\n      \"credentials\": {\n        \"username\": \"root\",\n        \"password\": \"{{simple_password}}\"\n      },\n      \"vSwitch\": \"{{esxi_vss_name}}\",\n      \"serverId\": \"{{host1_server_id}}\"\n    },\n    {\n      \"association\": \"{{vc_datacenter_name}}\",\n      \"ipAddressPrivate\": {\n        \"ipAddress\": \"{{host2_mgmt_ip}}\"\n      },\n      \"hostname\": \"{{host2_hostname_short}}\",\n      \"credentials\": {\n        \"username\": \"root\",\n        \"password\": \"{{simple_password}}\"\n      },\n      \"vSwitch\": \"{{esxi_vss_name}}\",\n      \"serverId\": \"{{host2_server_id}}\"\n    },\n    {\n      \"association\": \"{{vc_datacenter_name}}\",\n      \"ipAddressPrivate\": {\n        \"ipAddress\": \"{{host3_mgmt_ip}}\"\n      },\n      \"hostname\": \"{{host3_hostname_short}}\",\n      \"credentials\": {\n        \"username\": \"root\",\n        \"password\": \"{{simple_password}}\"\n      },\n      \"vSwitch\": \"{{esxi_vss_name}}\",\n      \"serverId\": \"{{host3_server_id}}\"\n    },\n    {\n      \"association\": \"{{vc_datacenter_name}}\",\n      \"ipAddressPrivate\": {\n        \"ipAddress\": \"{{host4_mgmt_ip}}\"\n      },\n      \"hostname\": \"{{host4_hostname_short}}\",\n      \"credentials\": {\n        \"username\": \"root\",\n        \"password\": \"{{simple_password}}\"\n      },\n      \"vSwitch\": \"{{esxi_vss_name}}\",\n      \"serverId\": \"{{host4_server_id}}\"\n    }\n  ],\n  \"excludedComponents\": [\"AVN\", \"EBGP\"]\n}"
+						},
+						"url": {
+							"raw": "https://{{cb_fqdn}}/v1/sddcs/validations/",
+							"protocol": "https",
+							"host": [
+								"{{cb_fqdn}}"
+							],
+							"path": [
+								"v1",
+								"sddcs",
+								"validations",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Status of SDDC JSON Validation",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://{{cb_fqdn}}/v1/sddcs/validations/{{current_task_id}}",
+							"protocol": "https",
+							"host": [
+								"{{cb_fqdn}}"
+							],
+							"path": [
+								"v1",
+								"sddcs",
+								"validations",
+								"{{current_task_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get SDDC's",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "VMware123!",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "admin",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{cb_fqdn}}/v1/sddcs",
+							"protocol": "https",
+							"host": [
+								"{{cb_fqdn}}"
+							],
+							"path": [
+								"v1",
+								"sddcs"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "{{simple_password}}",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "admin",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "SDDC Manager",
+			"item": [
+				{
+					"name": "Edges",
+					"item": [
+						{
+							"name": "(4) Deploy Edge Cluster",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": ""
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"edgeClusterName\" : \"{{edge_cluster_name}}\",\n  \"edgeClusterType\" : \"{{edge_cluster_type}}\",\n  \"edgeRootPassword\" : \"{{complex_password}}\",\n  \"edgeAdminPassword\" : \"{{complex_password}}\",\n  \"edgeAuditPassword\" : \"{{complex_password}}\",\n  \"edgeFormFactor\" : \"{{edge_cluster_form_factor}}\",\n  \"tier0ServicesHighAvailability\" : \"{{edge_cluster_t0_hamode}}\",\n  \"mtu\" : 9000,\n  \"asn\" : \"{{edge_cluster_t0_asn}}\",\n  \"edgeNodeSpecs\" : [ {\n    \"edgeNodeName\" : \"{{edge_node0_name}}\",\n    \"managementIP\" : \"{{edge_node0_mgmt_ip}}\",\n    \"managementGateway\" : \"{{edge_node0_mgmt_gateway}}\",\n    \"edgeTepGateway\" : \"{{edge_node0_tep_gateway}}\",\n    \"edgeTep1IP\" : \"{{edge_node0_tep_ip1}}\",\n    \"edgeTep2IP\" : \"{{edge_node0_tep_ip2}}\",\n    \"edgeTepVlan\" : \"{{edge_tep_vlan}}\",\n    \"clusterId\" : \"{{sddc_cluster_id}}\",\n    \"interRackCluster\" : false,\n    \"uplinkNetwork\" : [ {\n      \"uplinkVlan\" : \"{{edge_uplink1_vlan}}\",\n      \"uplinkInterfaceIP\" : \"{{edge_node0_uplink_interface0_ip}}\",\n      \"peerIP\" : \"{{edge_node0_peer0_ip}}\",\n      \"asnPeer\" : \"{{edge_t0_peer_asn}}\",\n      \"bgpPeerPassword\" : \"\"\n    }, {\n      \"uplinkVlan\" : \"{{edge_uplink2_vlan}}\",\n      \"uplinkInterfaceIP\" : \"{{edge_node0_uplink_interface1_ip}}\",\n      \"peerIP\" : \"{{edge_node0_peer1_ip}}\",\n      \"asnPeer\" : \"{{edge_t0_peer_asn}}\",\n      \"bgpPeerPassword\" : \"\"\n    } ]\n  }, {\n    \"edgeNodeName\" : \"{{edge_node1_name}}\",\n    \"managementIP\" : \"{{edge_node1_mgmt_ip}}\",\n    \"managementGateway\" : \"{{edge_node1_mgmt_gateway}}\",\n    \"edgeTepGateway\" : \"{{edge_node1_tep_gateway}}\",\n    \"edgeTep1IP\" : \"{{edge_node1_tep_ip1}}\",\n    \"edgeTep2IP\" : \"{{edge_node1_tep_ip2}}\",\n    \"edgeTepVlan\" : \"{{edge_tep_vlan}}\",\n    \"clusterId\" : \"{{sddc_cluster_id}}\",\n    \"interRackCluster\" : false,\n    \"uplinkNetwork\" : [ {\n      \"uplinkVlan\" : \"{{edge_uplink1_vlan}}\",\n      \"uplinkInterfaceIP\" : \"{{edge_node1_uplink_interface0_ip}}\",\n      \"peerIP\" : \"{{edge_node1_peer0_ip}}\",\n      \"asnPeer\" : \"{{edge_t0_peer_asn}}\",\n      \"bgpPeerPassword\" : \"\"\n    }, {\n      \"uplinkVlan\" : \"{{edge_uplink2_vlan}}\",\n      \"uplinkInterfaceIP\" : \"{{edge_node1_uplink_interface1_ip}}\",\n      \"peerIP\" : \"{{edge_node1_peer1_ip}}\",\n      \"asnPeer\" : \"{{edge_t0_peer_asn}}\",\n      \"bgpPeerPassword\" : \"\"\n    } ]\n  } ],\n  \"tier0RoutingType\" : \"{{edge_node_tier0_routing_type}}\",\n  \"tier0Name\" : \"{{edge_node_tier0_name}}\",\n  \"tier1Name\" : \"{{edge_node_tier1_name}}\",\n  \"edgeClusterProfileType\" : \"{{edge_cluster_profile_type}}\"\n}"
+								},
+								"url": {
+									"raw": "https://{{sddc_fqdn}}/v1/edge-clusters/",
+									"protocol": "https",
+									"host": [
+										"{{sddc_fqdn}}"
+									],
+									"path": [
+										"v1",
+										"edge-clusters",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Validate Edge Cluster JSON",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"edgeClusterName\" : \"{{edge_cluster_name}}\",\n  \"edgeClusterType\" : \"{{edge_cluster_type}}\",\n  \"edgeRootPassword\" : \"{{complex_password}}\",\n  \"edgeAdminPassword\" : \"{{complex_password}}\",\n  \"edgeAuditPassword\" : \"{{complex_password}}\",\n  \"edgeFormFactor\" : \"{{edge_cluster_form_factor}}\",\n  \"tier0ServicesHighAvailability\" : \"{{edge_cluster_t0_hamode}}\",\n  \"mtu\" : 9000,\n  \"asn\" : \"{{edge_cluster_t0_asn}}\",\n  \"edgeNodeSpecs\" : [ {\n    \"edgeNodeName\" : \"{{edge_node0_name}}\",\n    \"managementIP\" : \"{{edge_node0_mgmt_ip}}\",\n    \"managementGateway\" : \"{{edge_node0_mgmt_gateway}}\",\n    \"edgeTepGateway\" : \"{{edge_node0_tep_gateway}}\",\n    \"edgeTep1IP\" : \"{{edge_node0_tep_ip1}}\",\n    \"edgeTep2IP\" : \"{{edge_node0_tep_ip2}}\",\n    \"edgeTepVlan\" : \"{{edge_tep_vlan}}\",\n    \"clusterId\" : \"{{sddc_cluster_id}}\",\n    \"interRackCluster\" : false,\n    \"uplinkNetwork\" : [ {\n      \"uplinkVlan\" : \"{{edge_uplink1_vlan}}\",\n      \"uplinkInterfaceIP\" : \"{{edge_node0_uplink_interface0_ip}}\",\n      \"peerIP\" : \"{{edge_node0_peer0_ip}}\",\n      \"asnPeer\" : \"{{edge_t0_peer_asn}}\",\n      \"bgpPeerPassword\" : \"\"\n    }, {\n      \"uplinkVlan\" : \"{{edge_uplink2_vlan}}\",\n      \"uplinkInterfaceIP\" : \"{{edge_node0_uplink_interface1_ip}}\",\n      \"peerIP\" : \"{{edge_node0_peer1_ip}}\",\n      \"asnPeer\" : \"{{edge_t0_peer_asn}}\",\n      \"bgpPeerPassword\" : \"\"\n    } ]\n  }, {\n    \"edgeNodeName\" : \"{{edge_node1_name}}\",\n    \"managementIP\" : \"{{edge_node1_mgmt_ip}}\",\n    \"managementGateway\" : \"{{edge_node1_mgmt_gateway}}\",\n    \"edgeTepGateway\" : \"{{edge_node1_tep_gateway}}\",\n    \"edgeTep1IP\" : \"{{edge_node1_tep_ip1}}\",\n    \"edgeTep2IP\" : \"{{edge_node1_tep_ip2}}\",\n    \"edgeTepVlan\" : \"{{edge_tep_vlan}}\",\n    \"clusterId\" : \"{{sddc_cluster_id}}\",\n    \"interRackCluster\" : false,\n    \"uplinkNetwork\" : [ {\n      \"uplinkVlan\" : \"{{edge_uplink1_vlan}}\",\n      \"uplinkInterfaceIP\" : \"{{edge_node1_uplink_interface0_ip}}\",\n      \"peerIP\" : \"{{edge_node1_peer0_ip}}\",\n      \"asnPeer\" : \"{{edge_t0_peer_asn}}\",\n      \"bgpPeerPassword\" : \"\"\n    }, {\n      \"uplinkVlan\" : \"{{edge_uplink2_vlan}}\",\n      \"uplinkInterfaceIP\" : \"{{edge_node1_uplink_interface1_ip}}\",\n      \"peerIP\" : \"{{edge_node1_peer1_ip}}\",\n      \"asnPeer\" : \"{{edge_t0_peer_asn}}\",\n      \"bgpPeerPassword\" : \"\"\n    } ]\n  } ],\n  \"tier0RoutingType\" : \"{{edge_node_tier0_routing_type}}\",\n  \"tier0Name\" : \"{{edge_node_tier0_name}}\",\n  \"tier1Name\" : \"{{edge_node_tier1_name}}\",\n  \"edgeClusterProfileType\" : \"{{edge_cluster_profile_type}}\"\n}"
+								},
+								"url": {
+									"raw": "https://{{sddc_fqdn}}/v1/edge-clusters/validations/",
+									"protocol": "https",
+									"host": [
+										"{{sddc_fqdn}}"
+									],
+									"path": [
+										"v1",
+										"edge-clusters",
+										"validations",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "[TASK] Validate Edge Cluster",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://{{sddc_fqdn}}/v1/edge-clusters/validations/{{current_task_id}}",
+									"protocol": "https",
+									"host": [
+										"{{sddc_fqdn}}"
+									],
+									"path": [
+										"v1",
+										"edge-clusters",
+										"validations",
+										"{{current_task_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "AVN",
+					"item": [
+						{
+							"name": "Validate AVN",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer etYWRta...."
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"avns\": [ {\n        \"mtu\" : 9000,\n        \"name\": \"{{avn0_name}}\",\n        \"regionType\" : \"{{avn0_region}}\",\n        \"subnet\" : \"{{avn0_subnet}}\",\n        \"subnetMask\" : \"{{avn0_subnet_mask}}\",\n        \"gateway\" : \"{{avn0_gateway}}\",\n        \"routerName\": \"{{avn1_router_name}}\"\n    }, {\n        \"mtu\" : 9000,\n        \"name\": \"{{avn1_name}}\",\n        \"regionType\" : \"{{avn1_region}}\",\n        \"subnet\" : \"{{avn1_subnet}}\",\n        \"subnetMask\" : \"{{avn1_subnet_mask}}\",\n        \"gateway\" : \"{{avn1_gateway}}\",\n        \"routerName\": \"{{avn1_router_name}}\"\n    } ],\n    \"edgeClusterId\": \"{{sddc_ec_id}}\"\n}"
+								},
+								"url": {
+									"raw": "https://{{sddc_fqdn}}/v1/avns/validations",
+									"protocol": "https",
+									"host": [
+										"{{sddc_fqdn}}"
+									],
+									"path": [
+										"v1",
+										"avns",
+										"validations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "(6) Deploy AVN",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									},
+									{
+										"key": "Authorization",
+										"value": "Bearer etYWRta...."
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"avns\": [ {\n        \"mtu\" : 9000,\n        \"name\": \"{{avn0_name}}\",\n        \"regionType\" : \"{{avn0_region}}\",\n        \"subnet\" : \"{{avn0_subnet}}\",\n        \"subnetMask\" : \"{{avn0_subnet_mask}}\",\n        \"gateway\" : \"{{avn0_gateway}}\",\n        \"routerName\": \"{{avn0_name}}\"\n    }, {\n        \"mtu\" : 9000,\n        \"name\": \"{{avn1_name}}\",\n        \"regionType\" : \"{{avn1_region}}\",\n        \"subnet\" : \"{{avn1_subnet}}\",\n        \"subnetMask\" : \"{{avn1_subnet_mask}}\",\n        \"gateway\" : \"{{avn1_gateway}}\",\n        \"routerName\": \"{{avn1_name}}\"\n    } ],\n    \"edgeClusterId\": \"{{sddc_ec_id}}\"\n}"
+								},
+								"url": {
+									"raw": "https://{{sddc_fqdn}}/v1/avns/",
+									"protocol": "https",
+									"host": [
+										"{{sddc_fqdn}}"
+									],
+									"path": [
+										"v1",
+										"avns",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "vRSLCM",
+					"item": [
+						{
+							"name": "Validate vRSLCM",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"apiPassword\": \"{{complex_password}}\",\r\n    \"fqdn\": \"{{vrslcm_fqdn}}\",\r\n    \"nsxtStandaloneTier1Ip\": \"{{vrslcm_tier1_ip}}\",\r\n    \"sshPassword\": \"{{complex_password}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{sddc_fqdn}}/v1/vrslcms/validations",
+									"protocol": "https",
+									"host": [
+										"{{sddc_fqdn}}"
+									],
+									"path": [
+										"v1",
+										"vrslcms",
+										"validations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Validate vRSLCM ID",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"apiPassword\": \"{{complex_password}}\",\r\n    \"fqdn\": \"{{vrslcm_fqdn}}\",\r\n    \"nsxtStandaloneTier1Ip\": \"{{vrslcm_tier1_ip}}\",\r\n    \"sshPassword\": \"{{complex_password}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{sddc_fqdn}}/v1/vrslcms/validations/8c1217ee-bb67-404d-a05d-5007d65f6fe6",
+									"protocol": "https",
+									"host": [
+										"{{sddc_fqdn}}"
+									],
+									"path": [
+										"v1",
+										"vrslcms",
+										"validations",
+										"8c1217ee-bb67-404d-a05d-5007d65f6fe6"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "(7) Deploy vRSLCM",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"apiPassword\": \"{{complex_password}}\",\r\n    \"fqdn\": \"{{vrslcm_fqdn}}\",\r\n    \"nsxtStandaloneTier1Ip\": \"{{vrslcm_tier1_ip}}\",\r\n    \"sshPassword\": \"{{complex_password}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{sddc_fqdn}}/v1/vrslcms",
+									"protocol": "https",
+									"host": [
+										"{{sddc_fqdn}}"
+									],
+									"path": [
+										"v1",
+										"vrslcms"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "(2) [AUTH] Create Bearer Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);\r",
+									"postman.setEnvironmentVariable(\"sddc_bearer_token\", jsonData.accessToken);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"username\" : \"administrator@vsphere.local\",\n  \"password\" : \"{{simple_password}}\"\n}"
+						},
+						"url": {
+							"raw": "https://{{sddc_fqdn}}/v1/tokens",
+							"protocol": "https",
+							"host": [
+								"{{sddc_fqdn}}"
+							],
+							"path": [
+								"v1",
+								"tokens"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(3) [DATA] Get VC Clusters",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer etYWRta...."
+							}
+						],
+						"url": {
+							"raw": "https://{{sddc_fqdn}}/v1/clusters",
+							"protocol": "https",
+							"host": [
+								"{{sddc_fqdn}}"
+							],
+							"path": [
+								"v1",
+								"clusters"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(5) [DATA] Get Edge Clusters",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{sddc_fqdn}}/v1/edge-clusters",
+							"protocol": "https",
+							"host": [
+								"{{sddc_fqdn}}"
+							],
+							"path": [
+								"v1",
+								"edge-clusters"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[TASK] Get All Tasks",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{sddc_fqdn}}/v1/tasks",
+							"protocol": "https",
+							"host": [
+								"{{sddc_fqdn}}"
+							],
+							"path": [
+								"v1",
+								"tasks"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "[TASK] Get Current Task",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{SDDC_URL}}/v1/tasks/{{current_task_id}}",
+							"host": [
+								"{{SDDC_URL}}"
+							],
+							"path": [
+								"v1",
+								"tasks",
+								"{{current_task_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(8) Create Depot User (my.vmware.com)",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"vmwareAccount\" : {\n    \"username\" : \"{{depot_myvmware_username}}\",\n    \"password\" : \"{{depot_myvmware_password}}\"\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{sddc_fqdn}}/v1/system/settings/depot",
+							"protocol": "https",
+							"host": [
+								"{{sddc_fqdn}}"
+							],
+							"path": [
+								"v1",
+								"system",
+								"settings",
+								"depot"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "(9) Download vRSLCM 8.6.2. Bundle",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"bundleDownloadSpec\": {\r\n        \"downloadNow\": true\r\n    },\r\n    \"compatibilitySetsFilePath\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{sddc_fqdn}}/v1/bundles/{{vrslcm_bundle_id}}",
+							"protocol": "https",
+							"host": [
+								"{{sddc_fqdn}}"
+							],
+							"path": [
+								"v1",
+								"bundles",
+								"{{vrslcm_bundle_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Bundles",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{sddc_fqdn}}/v1/bundles/",
+							"protocol": "https",
+							"host": [
+								"{{sddc_fqdn}}"
+							],
+							"path": [
+								"v1",
+								"bundles",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{sddc_bearer_token}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					"pm.sendRequest(\"https://postman-echo.com/get\", function (err, response) {",
+					"    console.log(response.json());",
+					"});"
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

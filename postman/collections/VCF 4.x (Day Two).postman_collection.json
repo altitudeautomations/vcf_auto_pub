@@ -1,0 +1,1550 @@
+{
+	"info": {
+		"_postman_id": "daa8ad2c-90a5-448b-8109-de25610254c7",
+		"name": "VCF 4.x (Day Two)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "12242778"
+	},
+	"item": [
+		{
+			"name": "vRSLCM",
+			"item": [
+				{
+					"name": "Create Environment (VCF-Aware)",
+					"item": [
+						{
+							"name": "Deploy vIDM",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"environmentId\": \"globalenvironment\",\n    \"environmentName\": \"globalenvironment\",\n    \"infrastructure\": {\n        \"properties\": {\n            \"cluster\": \"{{vc_datacenter_name}}#{{vc_mgmt_clustername}}\",\n            \"dns\": \"{{dns_primaryns}},{{dns_secondaryns}}\",\n            \"certificate\": \"locker:certificate:{{vidm_certificate_vmid}}:{{vidm_certificate_alias}}\",\n            \"diskMode\": \"thin\",\n            \"vCenterHost\": \"{{vc_mgmt_hostname_long}}\",\n            \"storage\": \"{{vsan_dsname}}\",\n            \"ntp\": \"\",\n            \"vCenterName\": \"{{vc_mgmt_hostname_short}}\",\n            \"vcfProperties\": \"{\\\"vcfEnabled\\\":true,\\\"sddcManagerDetails\\\":[{\\\"sddcManagerHostName\\\":\\\"{{sddcm_host_long}}\\\",\\\"sddcManagerName\\\":\\\"default\\\",\\\"sddcManagerVmid\\\":\\\"default\\\"}]}\",\n            \"network\": \"{{avn1_name}}\",\n            \"masterVidmEnabled\": \"false\",\n            \"netmask\": \"{{avn1_subnet_mask}}\",\n            \"dataCenterVmid\": \"{{datacenter_vmid}}\",\n            \"vcUsername\": \"{{vcenter_password_username}}\",\n            \"domain\": \"{{dns_subdomain}}\",\n            \"enableTelemetry\": \"false\",\n            \"timeSyncMode\": \"ntp\",\n            \"folderName\": \"\",\n            \"acceptEULA\": \"true\",\n            \"vcPassword\": \"locker:password:{{vcenter_password_vmid}}:{{vcenter_password_alias}}\",\n            \"gateway\": \"{{avn1_gateway}}\",\n            \"searchpath\": \"{{dns_subdomain}}\",\n            \"defaultPassword\": \"locker:password:{{simple_password_vmid}}:{{simple_password_alias}}\",\n            \"resourcePool\": \"{{rp_sddc_mgmt}}\"\n        }\n    },\n    \"products\": [\n        {\n            \"id\": \"vidm\",\n            \"version\": \"3.3.6\",\n            \"clusterVIP\": {\n                \"clusterVips\": []\n            },\n            \"nodes\": [\n                {\n                    \"type\": \"vidm-primary\",\n                    \"properties\": {\n                        \"hostName\": \"{{vidm_fqdn}}\",\n                        \"vmName\": \"{{vidm_vm_name}}\",\n                        \"ip\": \"{{vidm_ip}}\"\n                    }\n                }\n            ],\n            \"collectorGroups\": null,\n            \"properties\": {\n                \"clusterFqdn\": \"{{vidm_fqdn}}\",\n                \"defaultConfigurationUsername\": \"ConfigAdmin\",\n                \"defaultTenantAlias\": \"\",\n                \"contentLibraryItemId\": \"\",\n                \"vidmDomainName\": \"{{dns_subdomain}}\",\n                \"syncGroupMembers\": \"true\",\n                \"nodeSize\": \"{{vidm_node_size}}\",\n                \"isClustered\": \"false\",\n                \"vidmAdminPassword\": \"locker:password:{{simple_password_vmid}}:{{simple_password_alias}}\",\n                \"enableTelemetry\": \"false\",\n                \"defaultConfigurationPassword\": \"locker:password:{{simple_password_vmid}}:{{simple_password_alias}}\",\n                \"defaultConfigurationEmail\": \"{{lab_admin_email}}\",\n                \"vidmDBType\": \"postgresql\",\n                \"fipsMode\": \"false\",\n                \"certificate\": \"locker:certificate:{{vidm_certificate_vmid}}:{{vidm_certificate_alias}}\"\n            }\n        }\n    ],\n    \"metaData\": {}\n}"
+								},
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/lcops/api/v2/environments",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"lcops",
+										"api",
+										"v2",
+										"environments"
+									]
+								},
+								"description": "Use this API to get list of supported versions for each vrealize products  - {{vRSLCM_URL}}/lcm/lcops/api/v2/policy/products/{{productId}}/versions"
+							},
+							"response": []
+						},
+						{
+							"name": "Deploy VRLI",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"environmentName\": \"vrli_deployment\",\r\n  \"infrastructure\": {\r\n    \"properties\": {\r\n      \"dataCenterVmid\": \"{{datacenter_vmid}}\",\r\n      \"regionName\": \"default\",\r\n      \"zoneName\": \"default\",\r\n      \"vCenterName\": \"{{vc_mgmt_hostname_short}}\",\r\n      \"vCenterHost\": \"{{vc_mgmt_hostname_long}}\",\r\n      \"vcUsername\": \"{{vcenter_password_username}}\",\r\n      \"vcPassword\": \"locker:password:{{vcenter_password_vmid}}:{{vcenter_password_alias}}\",\r\n      \"acceptEULA\": \"true\",\r\n      \"enableTelemetry\": \"false\",\r\n      \"defaultPassword\": \"locker:password:{{simple_password_vmid}}:{{simple_password_alias}}\",\r\n      \"certificate\": \"locker:certificate:{{vrli_certificate_vmid}}:{{vrli_certificate_alias}}\",\r\n      \"cluster\": \"{{vc_datacenter_name}}#{{vc_mgmt_clustername}}\",\r\n      \"storage\": \"{{vsan_dsname}}\",\r\n      \"folderName\": \"\",\r\n      \"resourcePool\": \"\",\r\n      \"diskMode\": \"thin\",\r\n      \"network\": \"{{avn1_name}}\",\r\n      \"masterVidmEnabled\": \"false\",\r\n      \"dns\": \"{{dns_primaryns}},{{dns_secondaryns}}\",\r\n      \"domain\": \"{{dns_subdomain}}\",\r\n      \"gateway\": \"{{avn1_gateway}}\",\r\n      \"netmask\": \"{{avn1_subnet_mask}}\",\r\n      \"searchpath\": \"{{avn1_gateway}}\",\r\n      \"timeSyncMode\": \"ntp\",\r\n      \"ntp\": \"{{ntps_primary}},{{ntps_secondary}}\",\r\n      \"isDhcp\": \"false\",\r\n      \"vcfProperties\": \"{\\\"vcfEnabled\\\":true,\\\"sddcManagerDetails\\\":[{\\\"sddcManagerHostName\\\":\\\"{{sddcm_host_long}}\\\",\\\"sddcManagerName\\\":\\\"default\\\",\\\"sddcManagerVmid\\\":\\\"default\\\"}]}\"\r\n    }\r\n  },\r\n  \"products\": [\r\n    {\r\n      \"id\": \"vrli\",\r\n      \"version\": \"8.6.2\",\r\n      \"clusterVIP\": {\r\n        \"clusterVips\": [\r\n          {\r\n            \"type\": \"vrli-cluster-1\",\r\n            \"properties\": {\r\n              \"hostName\": \"{{vrli_vip}}\",\r\n              \"ip\": \"{{vrli_vip_ip}}\"\r\n            }\r\n          }\r\n        ]\r\n      },\r\n      \"nodes\": [\r\n        {\r\n          \"type\": \"vrli-master\",\r\n          \"properties\": {\r\n            \"hostName\": \"{{vrli_fqdn1}}\",\r\n            \"vmName\": \"{{vrli_fqdn1}}\",\r\n            \"ip\": \"{{vrli_ip1}}\"\r\n          }\r\n        },\r\n        {\r\n          \"type\": \"vrli-worker\",\r\n          \"properties\": {\r\n            \"hostName\": \"{{vrli_fqdn2}}\",\r\n            \"vmName\": \"{{vrli_fqdn2}}\",\r\n            \"ip\": \"{{vrli_ip2}}\"\r\n          }\r\n        },\r\n        {\r\n          \"type\": \"vrli-worker\",\r\n          \"properties\": {\r\n            \"hostName\": \"{{vrli_fqdn3}}\",\r\n            \"vmName\": \"{{vrli_fqdn3}}\",\r\n            \"ip\": \"{{vrli_ip3}}\"\r\n          }\r\n        }\r\n      ],\r\n      \"properties\": {\r\n        \"certificate\": \"locker:certificate:{{vrli_certificate_vmid}}:{{vrli_certificate_alias}}\",\r\n        \"productPassword\": \"locker:password:{{simple_password_vmid}}:{{simple_password_alias}}\",\r\n        \"adminEmail\": \"{{lab_admin_email}}\",\r\n        \"fipsMode\": \"false\",\r\n        \"licenseRef\": \"locker:license{{locker_license_vmid}}:{{locker_license_alias}}\",\r\n        \"nodeSize\": \"small\",\r\n        \"configureClusterVIP\": \"true\",\r\n        \"affinityRule\": \"true\",\r\n        \"isUpgradeVmCompatibility\": \"true\",\r\n        \"vrliAlwaysUseEnglish\": \"false\",\r\n        \"masterVidmEnabled\": \"true\",\r\n        \"configureAffinitySeparateAll\": \"true\",\r\n        \"ntp\": \"{{ntps_primary}},{{ntps_secondary}}\",\r\n        \"timeSyncMode\": \"ntp\",\r\n        \"vrliAdminEmail\": \"{{lab_admin_email}}\",\r\n        \"vrliAdminPassword\": \"locker:password:{{simple_password_vmid}}:{{simple_password_alias}}\",\r\n        \"clusterFqdn\": \"{{vrli_vip}}\",\r\n        \"masterVidmHostName\": \"{{vidm_fqdn}}\"\r\n      }\r\n    }\r\n  ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/lcops/api/v2/environments",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"lcops",
+										"api",
+										"v2",
+										"environments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Deploy VROPs",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"environmentName\": \"vrops_deployment\",\n    \"infrastructure\": {\n        \"properties\": {\n            \"dataCenterVmid\": \"{{datacenter_vmid}}\",\n            \"regionName\": \"default\",\n            \"zoneName\": \"default\",\n            \"vCenterName\": \"{{vc_mgmt_hostname_short}}\",\n            \"vCenterHost\": \"{{vc_mgmt_hostname_long}}\",\n            \"vcUsername\": \"{{vcenter_password_username}}\",\n            \"vcPassword\": \"locker:password:{{vcenter_password_vmid}}:{{vcenter_password_alias}}\",\n            \"acceptEULA\": \"true\",\n            \"enableTelemetry\": \"false\",\n            \"defaultPassword\": \"locker:password:{{simple_password_vmid}}:{{simple_password_alias}}\",\n            \"certificate\": \"locker:certificate:{{vrops_certificate_vmid}}:{{vrops_certificate_alias}}\",\n            \"cluster\": \"{{vc_datacenter_name}}#{{vc_mgmt_clustername}}\",\n            \"storage\": \"{{vsan_dsname}}\",\n            \"folderName\": \"\",\n            \"resourcePool\": \"\",\n            \"diskMode\": \"thin\",\n            \"network\": \"{{avn1_name}}\",\n            \"masterVidmEnabled\": \"false\",\n            \"dns\": \"{{dns_primaryns}},{{dns_secondaryns}}\",\n            \"domain\": \"{{dns_subdomain}}\",\n            \"gateway\": \"{{avn1_gateway}}\",\n            \"netmask\": \"{{avn1_subnet_mask}}\",\n            \"searchpath\": \"{{avn1_gateway}}\",\n            \"timeSyncMode\": \"ntp\",\n            \"ntp\": \"{{ntps_primary}},{{ntps_secondary}}\",\n            \"isDhcp\": \"false\",\n            \"vcfProperties\": \"{\\\"vcfEnabled\\\":true,\\\"sddcManagerDetails\\\":[{\\\"sddcManagerHostName\\\":\\\"{{sddcm_host_long}}\\\",\\\"sddcManagerName\\\":\\\"default\\\",\\\"sddcManagerVmid\\\":\\\"default\\\"}]}\"\n        }\n    },\n    \"products\": [\n        {\n            \"id\": \"vrops\",\n            \"version\": \"8.6.2\",\n            \"patchHistory\": null,\n            \"snapshotHistory\": null,\n            \"logHistory\": null,\n            \"clusterVIP\": {\n                \"clusterVips\": [\n                    {\n                        \"type\": \"vrops-lb\",\n                        \"properties\": {\n                            \"hostName\": \"{{vrops_vip}}\",\n                            \"lockerCertificate\": \"locker:certificate:{{vrops_certificate_vmid}}:{{vrops_certificate_alias}}\"\n                        }\n                    }\n                ]\n            },\n            \"nodes\": [\n                {\n                    \"type\": \"master\",\n                    \"properties\": {\n                        \"vmName\": \"{{vrops_fqdn1}}\",\n                        \"hostName\": \"{{vrops_fqdn1}}\",\n                        \"ip\": \"{{vrops_ip1}}\"\n                    }\n                },\n                {\n                    \"type\": \"replica\",\n                    \"properties\": {\n                        \"vmName\": \"{{vrops_fqdn2}}\",\n                        \"hostName\": \"{{vrops_fqdn2}}\",\n                        \"ip\": \"{{vrops_ip2}}\"\n                    }\n                }\n            ],\n            \"collectorGroups\": null,\n            \"properties\": {\n                \"certificate\": \"locker:certificate:{{vrops_certificate_vmid}}:{{vrops_certificate_alias}}\",\n                \"productPassword\": \"locker:password:{{simple_password_vmid}}:{{simple_password_alias}}\",\n                \"licenseRef\": \"locker:license{{locker_license_vmid}}:{{locker_license_alias}}\",\n                \"disableTls\": \"TLSv1,TLSv1.1,TLSv1.2\",\n                \"fipsMode\": \"false\",\n                \"timeSyncMode\": \"ntp\",\n                \"masterVidmEnabled\": true,\n                \"ntp\": \"{{ntps_primary}},{{ntps_secondary}}\",\n                \"affinityRule\": true,\n                \"configureAffinitySeparateAll\": \"true\",\n                \"deployOption\": \"small\",\n                \"isCaEnabled\": \"false\",\n                \"contentLibraryItemId\": \"\",\n                \"contentLibraryItemId:proxy\": \"\"\n            }\n        }\n    ],\n    \"metaData\": {\n        \"isCloudProxyEnvironment\": \"false\"\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/lcops/api/v2/environments",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"lcops",
+										"api",
+										"v2",
+										"environments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Deploy VRA",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"environmentName\": \"vra_deployment\",\n  \"infrastructure\": {\n    \"properties\": {\n      \"dataCenterVmid\": \"{{datacenter_vmid}}\",\n      \"regionName\": \"default\",\n      \"zoneName\": \"default\",\n      \"vCenterName\": \"{{vc_mgmt_hostname_short}}\",\n      \"vCenterHost\": \"{{vc_mgmt_hostname_long}}\",\n      \"vcUsername\": \"{{vcenter_password_username}}\",\n      \"vcPassword\": \"locker:password:{{vcenter_password_vmid}}:{{vcenter_password_alias}}\",\n      \"acceptEULA\": \"true\",\n      \"enableTelemetry\": \"false\",\n      \"defaultPassword\": \"locker:password:{{simple_password_vmid}}:{{simple_password_alias}}\",\n      \"certificate\": \"locker:certificate:{{vra_certificate_vmid}}:{{vra_certificate_alias}}\",\n      \"cluster\": \"{{vc_datacenter_name}}#{{vc_mgmt_clustername}}\",\n      \"storage\": \"{{vsan_dsname}}\",\n      \"folderName\": \"\",\n      \"resourcePool\": \"\",\n      \"diskMode\": \"thin\",\n      \"network\": \"{{avn1_name}}\",\n      \"masterVidmEnabled\": \"false\",\n      \"dns\": \"{{dns_primaryns}},{{dns_secondaryns}}\",\n      \"domain\": \"{{dns_subdomain}}\",\n      \"gateway\": \"{{avn1_gateway}}\",\n      \"netmask\": \"{{avn1_subnet_mask}}\",\n      \"searchpath\": \"{{avn1_gateway}}\",\n      \"timeSyncMode\": \"ntp\",\n      \"ntp\": \"{{ntps_primary}},{{ntps_secondary}}\",\n      \"isDhcp\": \"false\",\n      \"vcfProperties\": \"{\\\"vcfEnabled\\\":true,\\\"sddcManagerDetails\\\":[{\\\"sddcManagerHostName\\\":\\\"{{sddcm_host_long}}\\\",\\\"sddcManagerName\\\":\\\"default\\\",\\\"sddcManagerVmid\\\":\\\"default\\\"}]}\"\n    }\n  },\n  \"products\": [\n    {\n      \"id\": \"vra\",\n      \"version\": \"8.6.2\",\n      \"properties\": {\n        \"certificate\": \"locker:certificate:{{vra_certificate_vmid}}:{{vra_certificate_alias}}\",\n        \"productPassword\": \"locker:password:{{simple_password_vmid}}:{{simple_password_alias}}\",\n        \"licenseRef\": \"locker:license{{locker_license_vmid}}:{{locker_license_alias}}\"\n      },\n      \"clusterVIP\": {\n        \"clusterVips\": [{\n            \"type\": \"vra-va\",\n            \"properties\": {\n              \"hostName\": \"{{vra_vip}}\",\n              \"isLBSslTerminated\": \"false\"\n            }\n          }]\n      },\n      \"nodes\": [\n        {\n          \"type\": \"vrava-primary\",\n          \"properties\": {\n            \"vmName\": \"{{vra_fqdn1}}\",\n            \"hostName\": \"{{vra_fqdn1}}\",\n            \"ip\": \"{{vra_ip1}}\"\n          }\n        },\n        {\n          \"type\": \"vrava-secondary\",\n          \"properties\": {\n           \"vmName\": \"{{vra_fqdn2}}\",\n            \"hostName\": \"{{vra_fqdn2}}\",\n            \"ip\": \"{{vra_ip2}}\"\n          }\n        },\n        {\n          \"type\": \"vrava-secondary\",\n          \"properties\": {\n           \"vmName\": \"{{vra_fqdn3}}\",\n            \"hostName\": \"{{vra_fqdn3}}\",\n            \"ip\": \"{{vra_ip3}}\"\n          }\n        }\n     ]\n    }\n  ]\n}\n ",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/lcops/api/v2/environments",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"lcops",
+										"api",
+										"v2",
+										"environments"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Create Environment (Standalone)",
+					"item": [
+						{
+							"name": "Deploy vIDM",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"environmentId\": \"globalenvironment\",\n  \"environmentName\": \"globalenvironment\",\n  \"environmentDescription\": \"\",\n  \"environmentHealth\": null,\n  \"logHistory\": null,\n  \"environmentStatus\": null,\n  \"infrastructure\": {\n    \"properties\": {\n      \"cluster\": \"{{vc_datacenter_name}}#{{vc_mgmt_clustername}}\",\n      \"dns\": \"{{dns_primaryns}},{{dns_secondaryns}}\",\n      \"certificate\": \"locker:certificate:{{vidm_certificate_vmid}}:{{vidm_certificate_alias}}\",\n      \"diskMode\": \"thin\",\n      \"vCenterHost\": \"{{vc_mgmt_hostname_long}}\",\n      \"storage\": \"{{vsan_dsname}}\",\n      \"ntp\": \"\",\n      \"vCenterName\": \"{{vc_mgmt_hostname_short}}\",\n      \"vcfProperties\": \"{\\\"vcfEnabled\\\":true,\\\"sddcManagerDetails\\\":[{\\\"sddcManagerHostName\\\":\\\"{{sddcm_host_long}}\\\",\\\"sddcManagerName\\\":\\\"default\\\",\\\"sddcManagerVmid\\\":\\\"default\\\"}]}\",\n      \"network\": \"{{avn1_name}}\",\n      \"masterVidmEnabled\": \"false\",\n      \"netmask\": \"{{avn1_subnet_mask}}\",\n      \"dataCenterVmid\": \"{{datacenter_vmid}}\",\n      \"vcUsername\": \"{{vcenter_password_username}}\",\n      \"domain\": \"{{dns_subdomain}}\",\n      \"enableTelemetry\": \"false\",\n      \"timeSyncMode\": \"ntp\",\n      \"folderName\": \"\",\n      \"acceptEULA\": \"true\",\n      \"vcPassword\": \"locker:password:{{vcenter_password_vmid}}:{{vcenter_password_alias}}\",\n      \"gateway\": \"{{avn1_gateway}}\",\n      \"searchpath\": \"{{dns_subdomain}}\",\n      \"defaultPassword\": \"locker:password:{{simple_password_vmid}}:{{simple_password_alias}}\",\n      \"resourcePool\": \"{{rp_sddc_mgmt}}\"\n    }\n  },\n  \"products\": [\n    {\n      \"id\": \"vidm\",\n      \"version\": \"3.3.6\",\n      \"patchHistory\": \"\",\n      \"snapshotHistory\": \"\",\n      \"logHistory\": \"\",\n      \"clusterVIP\": {\n        \"clusterVips\": []\n      },\n      \"nodes\": [\n        {\n          \"type\": \"vidm-primary\",\n          \"properties\": {\n            \"hostName\": \"{{vidm_fqdn}}\",\n            \"vmName\": \"{{vidm_vm_name}}\",\n            \"ip\": \"{{vidm_ip}}\"\n                      }\n        }\n      ],\n      \"collectorGroups\": null,\n      \"properties\": {\n        \"clusterFqdn\": \"{{vidm_fqdn}}\",\n        \"__enableTenancy\": \"false\",\n        \"defaultConfigurationUsername\": \"{{vidm_configadmin}}\",\n        \"vidmDomainName\": \"{{dns_subdomain}}\",\n        \"__isMigrationRequest\": \"false\",\n        \"syncGroupMembers\": \"true\",\n        \"__isInstallerRequest\": \"false\",\n        \"nodeSize\": \"{{vidm_node_size}}\",\n        \"isClustered\": \"false\",\n        \"__isTenantByPath\": \"false\",\n        \"vidmAdminPassword\": \"locker:password:{{simple_password_vmid}}:{{simple_password_alias}}\",\n        \"enableTelemetry\": \"false\",\n        \"defaultConfigurationPassword\": \"locker:password:{{simple_password_vmid}}:{{simple_password_alias}}\",\n        \"adminEmail\": \"{{lab_admin_email}}\",\n        \"__isTenancyEnabled\": \"false\",\n        \"vidmDBType\": \"postgresql\",\n        \"__vidmIsExternalDB\": \"false\",\n        \"__vidmHasExternalConnectors\": \"false\",\n        \"__vidmFormFactor\": \"true\",\n        \"fipsMode\": \"false\",\n        \"certificate\": \"locker:certificate:{{vidm_certificate_vmid}}:{{vidm_certificate_alias}}\"\n      }\n    }\n  ],\n  \"metaData\": {}\n}"
+								},
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/lcops/api/v2/environments",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"lcops",
+										"api",
+										"v2",
+										"environments"
+									]
+								},
+								"description": "Use this API to get list of supported versions for each vrealize products  - {{vRSLCM_URL}}/lcm/lcops/api/v2/policy/products/{{productId}}/versions"
+							},
+							"response": []
+						},
+						{
+							"name": "Deploy vIDM jimboslice",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"environmentId\": \"globalenvironment\",\n  \"environmentName\": \"globalenvironment\",\n  \"environmentDescription\": \"\",\n  \"environmentHealth\": null,\n  \"logHistory\": null,\n  \"environmentStatus\": null,\n  \"infrastructure\": {\n    \"properties\": {\n      \"cluster\": \"{{vc_datacenter_name}}#{{vc_mgmt_clustername}}\",\n      \"dns\": \"{{dns_primaryns}},{{dns_secondaryns}}\",\n      \"certificate\": \"locker:certificate:{{vidm_certificate_vmid}}:{{vidm_certificate_alias}}\",\n      \"diskMode\": \"thin\",\n      \"vCenterHost\": \"{{vc_mgmt_hostname_long}}\",\n      \"storage\": \"{{vsan_dsname}}\",\n      \"ntp\": \"\",\n      \"vCenterName\": \"{{vc_mgmt_hostname_short}}\",\n      \"vcfProperties\": \"{\\\"vcfEnabled\\\":true,\\\"sddcManagerDetails\\\":[{\\\"sddcManagerHostName\\\":\\\"{{sddcm_host_long}}\\\",\\\"sddcManagerName\\\":\\\"default\\\",\\\"sddcManagerVmid\\\":\\\"default\\\"}]}\",\n      \"network\": \"{{avn1_name}}\",\n      \"masterVidmEnabled\": \"false\",\n      \"netmask\": \"{{avn1_subnet_mask}}\",\n      \"dataCenterVmid\": \"{{datacenter_vmid}}\",\n      \"vcUsername\": \"{{vcenter_password_username}}\",\n      \"domain\": \"{{dns_subdomain}}\",\n      \"enableTelemetry\": \"false\",\n      \"timeSyncMode\": \"ntp\",\n      \"folderName\": \"\",\n      \"acceptEULA\": \"true\",\n      \"vcPassword\": \"locker:password:{{vcenter_password_vmid}}:{{vcenter_password_alias}}\",\n      \"gateway\": \"{{avn1_gateway}}\",\n      \"searchpath\": \"{{dns_subdomain}}\",\n      \"defaultPassword\": \"locker:password:{{simple_password_vmid}}:{{simple_password_alias}}\",\n      \"resourcePool\": \"\"\n    }\n  },\n  \"products\": [\n    {\n      \"id\": \"vidm\",\n      \"version\": \"3.3.6\",\n      \"patchHistory\": \"\",\n      \"snapshotHistory\": \"\",\n      \"logHistory\": \"\",\n      \"clusterVIP\": {\n        \"clusterVips\": []\n      },\n      \"nodes\": [\n        {\n          \"type\": \"vidm-primary\",\n          \"properties\": {\n            \"hostName\": \"{{vidm_fqdn}}\",\n            \"vmName\": \"{{vidm_vm_name}}\",\n            \"ip\": \"{{vidm_ip}}\"\n                      }\n        }\n      ],\n      \"collectorGroups\": null,\n      \"properties\": {\n        \"clusterFqdn\": \"{{vidm_fqdn}}\",\n        \"__enableTenancy\": \"false\",\n        \"defaultConfigurationUsername\": \"ConfigAdmin\",\n        \"vidmDomainName\": \"{{dns_subdomain}}\",\n        \"__isMigrationRequest\": \"false\",\n        \"syncGroupMembers\": \"true\",\n        \"__isInstallerRequest\": \"false\",\n        \"nodeSize\": \"medium\",\n        \"isClustered\": \"false\",\n        \"__isTenantByPath\": \"false\",\n        \"vidmAdminPassword\": \"locker:password:{{simple_password_vmid}}:{{simple_password_alias}}\",\n        \"enableTelemetry\": \"false\",\n        \"defaultConfigurationPassword\": \"locker:password:{{simple_password_vmid}}:{{simple_password_alias}}\",\n        \"adminEmail\": \"{{lab_admin_email}}\",\n        \"__isTenancyEnabled\": \"false\",\n        \"vidmDBType\": \"postgresql\",\n        \"__vidmIsExternalDB\": \"false\",\n        \"__vidmHasExternalConnectors\": \"false\",\n        \"__vidmFormFactor\": \"true\",\n        \"fipsMode\": \"false\",\n        \"certificate\": \"locker:certificate:{{vidm_certificate_vmid}}:{{vidm_certificate_alias}}\"\n      }\n    }\n  ],\n  \"metaData\": {}\n}"
+								},
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/lcops/api/v2/environments",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"lcops",
+										"api",
+										"v2",
+										"environments"
+									]
+								},
+								"description": "Use this API to get list of supported versions for each vrealize products  - {{vRSLCM_URL}}/lcm/lcops/api/v2/policy/products/{{productId}}/versions"
+							},
+							"response": []
+						},
+						{
+							"name": "Deploy VRLI",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{vRSLCM_URL}}/lcm/lcops/api/v2/environments",
+									"host": [
+										"{{vRSLCM_URL}}"
+									],
+									"path": [
+										"lcm",
+										"lcops",
+										"api",
+										"v2",
+										"environments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Deploy VROPs",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"environmentName\": \"vrops_large_deployments\",\n  \"infrastructure\": {\n    \"properties\": {\n      \"dataCenterVmid\": \"{{dataCenterVmid}}\",\n      \"regionName\": \"default\",\n      \"zoneName\": \"default\",\n      \"vCenterName\": \"VC2\",\n      \"vCenterHost\": \"vcenter.domain.name\",\n      \"vcUsername\": \"abc@local\",\n      \"vcPassword\": \"\",\n      \"acceptEULA\": \"true\",\n      \"enableTelemetry\": \"true\",\n      \"adminEmail\": \"abc@vmware.com\",\n      \"defaultPassword\": \"\",\n      \"certificate\": \"\",\n      \"cluster\": \"Datacenter#Cluster-01\",\n      \"storage\": \"ISCSI-15TB-04\",\n      \"folderName\": \"\",\n      \"resourcePool\": \"\",\n      \"diskMode\": \"thin\",\n      \"network\": \"traffic1024\",\n      \"masterVidmEnabled\": \"false\",\n      \"dns\": \"2.2.2.2\",\n      \"domain\": \"sqa.local\",\n      \"gateway\": \"2.2.2.2\",\n      \"netmask\": \"3.3.3.3\",\n      \"searchpath\": \"sqa.local\",\n      \"timeSyncMode\": \"ntp\",\n      \"ntp\": \"ntp1\",\n      \"isDhcp\": \"false\"\n    }\n  },\n  \"products\": [\n    {\n      \"id\": \"vrops\",\n      \"version\": \"8.0.1\",\n      \"properties\": {\n        \"licenseRef\": \"locker:license:{{licenseVmid}}:{{licenseAlias}}\",\n        \"certificate\": \"locker:certificate:{{certificateVmid}}:{{certificateAlias}}\",\n        \"productPassword\": \"locker:password:{{passwordVmid}}:{{passwordAlias}}\",\n        \"disableTls\": \"\",\n        \"timeSyncMode\": \"ntp\",\n        \"masterVidmEnabled\": false,\n        \"ntp\": \"ntp1\",\n        \"affinityRule\": false,\n        \"configureAffinitySeparateAll\": \"true\",\n        \"deployOption\": \"large\"\n      },\n      \"clusterVIP\": {\n        \"clusterVips\": []\n      },\n      \"nodes\": [\n        {\n          \"type\": \"remotecollector\",\n          \"properties\": {\n            \"vmName\": \"vrops-remotecollector\",\n            \"hostName\": \"sqa.local\",\n            \"deployOption\": \"smallrc\",\n            \"ip\": \"4.4.4.4\",\n            \"gateway\": \"2.2.2.2\",\n            \"domain\": \"2.2.2.2\",\n            \"searchpath\": \"2.2.2.2\",\n            \"dns\": \"4.4.4.4\",\n            \"netmask\": \"2.2.2.2\",\n            \"extendedStorage\": \"\",\n            \"timeZone\": \"\",\n            \"ntp\": \"\",\n            \"vCenterHost\": \"vcenter.domain.name\",\n            \"cluster\": \"Datacenter-01#Cluster-01\",\n            \"resourcePool\": \"\",\n            \"folderName\": \"\",\n            \"network\": \"dvs-55-Network\",\n            \"storage\": \"ISCSI-15TB-02\",\n            \"diskMode\": \"thin\",\n            \"contentLibraryItemId\": \"\",\n            \"vCenterName\": \"lcm-vc1\",\n            \"vcUsername\": \"abc@local\",\n            \"vcPassword\": \"locker:password:{{passwordVmid}}:{{passwordAlias}}\"\n          }\n        },\n        {\n          \"type\": \"master\",\n          \"properties\": {\n            \"vmName\": \"mastervmname\",\n            \"hostName\": \"hostName\",\n            \"ip\": \"2.2.2.2\"\n          }\n        },\n        {\n          \"type\": \"replica\",\n          \"properties\": {\n            \"vmName\": \"replicavmname\",\n            \"hostName\": \"hostName\",\n            \"ip\": \"3.3.3.3\"\n          }\n        },\n        {\n          \"type\": \"data\",\n          \"properties\": {\n            \"vmName\": \"datavmname\",\n            \"hostName\": \"sqa.local\",\n            \"ip\": \"4.4.4.4\"\n          }\n        }\n      ]\n    }\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{vRSLCM_URL}}/lcm/lcops/api/v2/environments",
+									"host": [
+										"{{vRSLCM_URL}}"
+									],
+									"path": [
+										"lcm",
+										"lcops",
+										"api",
+										"v2",
+										"environments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Deploy VRNI",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"environmentName\": \"vRNI_deployment\",\n  \"infrastructure\": {\n    \"properties\": {\n      \"dataCenterVmid\": \"{{dataCenterVmid}}\",\n      \"regionName\": \"default\",\n      \"zoneName\": \"default\",\n      \"vCenterName\": \"LCM-VC\",\n      \"vCenterHost\": \"vcenter.domain.name\",\n      \"vcUsername\": \"abc@vsphere.local\",\n      \"vcPassword\": \"locker:password:{{passwordVmid}}:{{passwordAlias}}\",\n      \"acceptEULA\": \"true\",\n      \"enableTelemetry\": \"true\",\n      \"adminEmail\": \"abc@vmware.com\",\n      \"defaultPassword\": \"locker:password:{{passwordVmid}}:{{passwordAlias}}\",\n      \"certificate\": \"locker:certificate:{{certificateVmid}}:{{certificateAlias}}\",\n      \"cluster\": \"Datacenter#Cluster-01\",\n      \"storage\": \"ISCSI-15TB-04\",\n      \"folderName\": \"\",\n      \"resourcePool\": \"\",\n      \"diskMode\": \"thin\",\n      \"network\": \"infra-traffic-1024\",\n      \"masterVidmEnabled\": \"false\",\n      \"dns\": \"4.4.4.4\",\n      \"domain\": \"sqa.local\",\n      \"gateway\": \"3.3.3.3\",\n      \"netmask\": \"6.6.6.6\",\n      \"searchpath\": \"sqa.local\",\n      \"timeSyncMode\": \"host\",\n      \"ntp\": \"\",\n      \"isDhcp\": \"false\"\n    }\n  },\n  \"products\": [\n    {\n      \"id\": \"vrni\",\n      \"version\": \"5.1.0\",\n      \"properties\": {\n        \"ntp\": \"\",\n        \"certificate\": \"locker:certificate:{{certificateVmid}}:{{certificateAlias}}\",\n        \"productPassword\": \"locker:password:{{passwordVmid}}:{{passwordAlias}}\",\n        \"licenseRef\": \"locker:license:{{licenseVmid}}:{{licenseAlias}}\",\n        \"affinityRule\": false,\n        \"configureAffinitySeparateAll\": \"true\",\n        \"masterVidmEnabled\": false\n      },\n      \"clusterVIP\": {\n        \"clusterVips\": []\n      },\n      \"nodes\": [\n        {\n          \"type\": \"vrni-platform\",\n          \"properties\": {\n            \"vmName\": \"vrni-platform\",\n            \"vrniNodeSize\": \"medium\",\n            \"ip\": \"3.3.3.3\"\n          }\n        },\n        {\n          \"type\": \"vrni-collector\",\n          \"properties\": {\n            \"vmName\": \"vrni-collector\",\n            \"vrniNodeSize\": \"medium\",\n            \"ip\": \"4.4.4.4\"\n          }\n        }\n      ]\n    }\n  ]\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{vRSLCM_URL}}/lcm/lcops/api/v2/environments",
+									"host": [
+										"{{vRSLCM_URL}}"
+									],
+									"path": [
+										"lcm",
+										"lcops",
+										"api",
+										"v2",
+										"environments"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Deploy VRA",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\n  \"environmentId\": \"\",\n  \"environmentName\": \"altauto_vrealize\",\n  \"environmentDescription\": \"\",\n  \"environmentHealth\": null,\n  \"logHistory\": null,\n  \"environmentStatus\": null,\n  \"infrastructure\": {\n    \"properties\": {\n      \"dataCenterVmid\": \"{{dataCenterVmid}}\",\n      \"regionName\": \"default\",\n      \"zoneName\": \"default\",\n      \"vCenterName\": \"VC2\",\n      \"vCenterHost\": \"vcenter.domain.name\",\n      \"vcUsername\": \"abc@vsphere.local\",\n      \"vcPassword\": \"locker:password:{{passwordVmid}}:{{passwordAlias}}\",\n      \"acceptEULA\": \"true\",\n      \"enableTelemetry\": \"true\",\n      \"adminEmail\": \"abc@vmware.com\",\n      \"defaultPassword\": \"locker:password:{{passwordVmid}}:{{passwordAlias}}\",\n      \"certificate\": \"locker:certificate:{{certificateVmid}}:{{certificateAlias}}\",\n      \"cluster\": \"Datacenter#Cluster-01\",\n      \"storage\": \"ISCSI-15TB-04\",\n      \"folderName\": \"\",\n      \"resourcePool\": \"\",\n      \"diskMode\": \"thin\",\n      \"network\": \"infra-traffic\",\n      \"masterVidmEnabled\": \"false\",\n      \"dns\": \"1.1.1.1\",\n      \"domain\": \"sqa.local\",\n      \"gateway\": \"1.1.1.1\",\n      \"netmask\": \"2.2.2.2\",\n      \"searchpath\": \"sqa.local\",\n      \"timeSyncMode\": \"host\",\n      \"ntp\": \"\",\n      \"isDhcp\": \"false\"\n    }\n  },\n  \"products\": [\n    {\n      \"id\": \"vra\",\n      \"version\": \"8.9.0\",\n      \"patchHistory\": \"\",\n      \"snapshotHistory\": \"\",\n      \"logHistory\": \"\",\n      \"clusterVIP\": {\n        \"clusterVips\": []\n      },\n      \"nodes\": [\n        {\n          \"type\": \"vrava-primary\",\n          \"properties\": {\n            \"hostName\": \"{{vra_host1_fqdn}}\",\n            \"cluster\": \"{{lcm_vc_clustername}}\",\n            \"vmName\": \"{{vra_host1_vmname}}\",\n            \"ip\": \"{{vra_host1_ip}}\",\n            \"dns\": \"{{dns_primaryns}},{{dns_secondaryns}}\",\n            \"diskMode\": \"thin\",\n            \"vCenterHost\": \"{{lcm_vc_fqdn}}\",\n            \"storage\": \"{{vsan_dsname}}\",\n            \"network\": \"{{pg_avn_xreg}}\",\n            \"contentLibraryItemId\": \"\",\n            \"netmask\": \"{{avn_xreg_netmask}}\",\n            \"vcUsername\": \"{{vc_admin_username}}\",\n            \"domain\": \"{{dns_subdomain}}\",\n            \"folderName\": \"\",\n            \"vcPassword\": \"locker:password:ee43dc42-c6dd-4d4b-b8b4-115836edcc87:installervCenter\",\n            \"gateway\": \"{{avn_xreg_gateway}}\",\n            \"searchpath\": \"{{dns_subdomain}}\",\n            \"rootPassword\": \"locker:password:{{passwordVmid}}:{{passwordAlias}}\",\n            \"resourcePool\": \"\"\n          }\n        }\n      ],\n      \"collectorGroups\": null,\n      \"properties\": {\n        \"certificate\": \"locker:certificate:{{certificateVmid}}:{{certificateAlias}}\",\n        \"contentLibraryItemId\": \"\",\n        \"productPassword\": \"locker:password:{{passwordVmid}}:{{passwordAlias}}\",\n        \"nodeSize\": \"medium\",\n        \"vraK8ServiceCidr\": \"10.244.4.0/22\",\n        \"vraK8ClusterCidr\": \"10.244.0.0/22\",\n        \"fipsMode\": \"false\",\n        \"ntp\": \"\",\n        \"timeSyncMode\": \"host\",\n        \"licenseRef\": \"locker:license:{{locker_lic_vrealize_vmid}}:{{locker_lic_vrealize_alias}}\",\n        \"enableTelemetry\": \"false\",\n        \"__vraTenantList\": \"[\\\"kano\\\"]\",\n        \"certificateChain\": \"{{locker_cert_vra_chain}}\",\n        \"__vidmCatalogAppId\": \"e2b854d8-5ddf-458d-885c-5a0a6ca96f01\"\n      }\n    }\n  ],\n  \"metaData\": {}\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{vRSLCM_URL}}/lcm/lcops/api/v2/environments",
+									"host": [
+										"{{vRSLCM_URL}}"
+									],
+									"path": [
+										"lcm",
+										"lcops",
+										"api",
+										"v2",
+										"environments"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "PSPack",
+					"item": [
+						{
+							"name": "Get PSPacks Online",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/lcops/api/v2/system-pspack",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"lcops",
+										"api",
+										"v2",
+										"system-pspack"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List PSPacks",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/lcops/api/v2/system-pspack",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"lcops",
+										"api",
+										"v2",
+										"system-pspack"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Apply PSPack",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/lcops/api/v2/system-pspack/{{vrslcm_pspack_id}}",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"lcops",
+										"api",
+										"v2",
+										"system-pspack",
+										"{{vrslcm_pspack_id}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Authentication",
+					"item": [
+						{
+							"name": "Local User based authentication",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{complex_password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{vrslcm_local_admin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json",
+										"type": "text"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/authzn/api/login",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"authzn",
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create MyVmware Depot User",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{complex_password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{vrslcm_local_admin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									},
+									{
+										"key": "Accept",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"userName\" : \"{{depot_myvmware_username}}\",\n    \"password\" : \"locker:password:{{depot_myvmware_vmid}}:{{depot_myvmware_alias}}\"\n}"
+								},
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/lcops/api/v2/settings/my-vmware/accounts",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"lcops",
+										"api",
+										"v2",
+										"settings",
+										"my-vmware",
+										"accounts"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Locker Password",
+					"item": [
+						{
+							"name": "Creates simple password in password Store",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"simple_password_vmid\", jsonData.vmid);",
+											"postman.setEnvironmentVariable(\"simple_password_alias\", jsonData.alias);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*, application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"alias\": \"simple_password\",\n  \"createdOn\": 0,\n  \"lastUpdatedOn\": 0,\n  \"password\": \"{{simple_password}}\",\n  \"passwordDescription\": \"simple password\",\n  \"principal\": \"\",\n  \"userName\": \"\"\n}"
+								},
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/locker/api/v2/passwords",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"locker",
+										"api",
+										"v2",
+										"passwords"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List Paginated Passwords",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*, application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/locker/api/v2/passwords",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"locker",
+										"api",
+										"v2",
+										"passwords"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creates complex password in password Store",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"complex_password_vmid\", jsonData.vmid);",
+											"postman.setEnvironmentVariable(\"complex_password_alias\", jsonData.alias);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*, application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"alias\": \"complex_password\",\n  \"createdOn\": 0,\n  \"lastUpdatedOn\": 0,\n  \"password\": \"{{complex_password}}\",\n  \"passwordDescription\": \"complex password\",\n  \"principal\": \"\",\n  \"userName\": \"\"\n}"
+								},
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/locker/api/v2/passwords",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"locker",
+										"api",
+										"v2",
+										"passwords"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Creates My VMware Depot password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"complex_password_vmid\", jsonData.vmid);",
+											"postman.setEnvironmentVariable(\"complex_password_alias\", jsonData.alias);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "*/*, application/json"
+									},
+									{
+										"key": "Content-Type",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"alias\": \"depot_password\",\n  \"createdOn\": 0,\n  \"lastUpdatedOn\": 0,\n  \"password\": \"{{depot_myvmware_password}}\",\n  \"passwordDescription\": \"Depot Password\",\n  \"principal\": \"\",\n  \"userName\": \"\"\n}"
+								},
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/locker/api/v2/passwords",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"locker",
+										"api",
+										"v2",
+										"passwords"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Locker Certificates",
+					"item": [
+						{
+							"name": "Generate a new Certificate - vIDM",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"vidm_certificate_alias\", jsonData.alias);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"alias\": \"{{vidm_certificate_alias}}\",\n  \"cN\": \"{{vidm_certificate_cn}}\",\n  \"ip\": [\n    \"{{vidm_ip}}\"\n  ],\n  \"host\": [\n    \"{{vidm_fqdn}}\"\n  ],\n  \"oU\": \"{{cert_ou}}\",\n  \"size\": \"{{cert_size}}\",\n  \"o\": \"{{cert_org}}\",\n  \"l\": \"{{cert_locality}}\",\n  \"sT\": \"{{cert_state}}\",\n  \"c\": \"{{cert_country}}\",\n  \"validity\" : 397\n}"
+								},
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/locker/api/v2/certificates",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"locker",
+										"api",
+										"v2",
+										"certificates"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Generate a new Certificate - vROPs",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"certificateAlias\", jsonData.alias);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"alias\": \"{{vrops_certificate_alias}}\",\n  \"cN\": \"{{vrops_certificate_cn}}\",\n  \"ip\": [\n    \"{{vrops_vip_ip}}\",\n    \"{{vrops_ip1}}\",\n    \"{{vrops_ip2}}\"\n  ],\n  \"host\": [\n    \"{{vrops_vip}}\",\n    \"{{vrops_fqdn1}}\",\n    \"{{vrops_fqdn2}}\"\n  ],\n  \"oU\": \"{{cert_ou}}\",\n  \"size\": \"{{cert_size}}\",\n  \"o\": \"{{cert_org}}\",\n  \"l\": \"{{cert_locality}}\",\n  \"sT\": \"{{cert_state}}\",\n  \"c\": \"{{cert_country}}\",\n  \"validity\" : 397\n}"
+								},
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/locker/api/v2/certificates",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"locker",
+										"api",
+										"v2",
+										"certificates"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Generate a new Certificate - vRA",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"certificateAlias\", jsonData.alias);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"alias\": \"{{vra_certificate_alias}}\",\n  \"cN\": \"{{vra_certificate_cn}}\",\n  \"ip\": [\n    \"{{vra_vip_ip}}\",\n    \"{{vra_ip1}}\",\n    \"{{vra_ip2}}\",\n    \"{{vra_ip3}}\"\n  ],\n  \"host\": [\n    \"{{vra_vip}}\",\n    \"{{vra_fqdn1}}\",\n    \"{{vra_fqdn2}}\",\n    \"{{vra_fqdn3}}\"\n  ],\n  \"oU\": \"{{cert_ou}}\",\n  \"size\": \"{{cert_size}}\",\n  \"o\": \"{{cert_org}}\",\n  \"l\": \"{{cert_locality}}\",\n  \"sT\": \"{{cert_state}}\",\n  \"c\": \"{{cert_country}}\",\n  \"validity\" : 397\n}"
+								},
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/locker/api/v2/certificates",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"locker",
+										"api",
+										"v2",
+										"certificates"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Generate a new Certificate - vRLI",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"certificateAlias\", jsonData.alias);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"alias\": \"{{vrli_certificate_alias}}\",\n  \"cN\": \"{{vrli_certificate_cn}}\",\n  \"ip\": [\n    \"{{vrli_vip_ip}}\",\n    \"{{vrli_ip1}}\",\n    \"{{vrli_ip2}}\",\n    \"{{vrli_ip3}}\"\n  ],\n  \"host\": [\n    \"{{vrli_vip}}\",\n    \"{{vrli_fqdn1}}\",\n    \"{{vrli_fqdn2}}\",\n    \"{{vrli_fqdn3}}\"\n  ],\n  \"oU\": \"{{cert_ou}}\",\n  \"size\": \"{{cert_size}}\",\n  \"o\": \"{{cert_org}}\",\n  \"l\": \"{{cert_locality}}\",\n  \"sT\": \"{{cert_state}}\",\n  \"c\": \"{{cert_country}}\",\n  \"validity\" : 397\n}"
+								},
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/locker/api/v2/certificates",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"locker",
+										"api",
+										"v2",
+										"certificates"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "List paginated Certificates",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/locker/api/v2/certificates",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"locker",
+										"api",
+										"v2",
+										"certificates"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Locker Licenses",
+					"item": [
+						{
+							"name": "Validate and add license to locker store",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"var jsonData = JSON.parse(responseBody);",
+											"postman.setEnvironmentVariable(\"license_vmid\", jsonData.vmid);",
+											"postman.setEnvironmentVariable(\"requestId\", jsonData.requestId);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"alias\": \"{{locker_license_alias}}\",\n  \"serialKey\": \"{{locker_license_serial_key}}\"\n}"
+								},
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/locker/api/v2/license/validate-and-add",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"locker",
+										"api",
+										"v2",
+										"license",
+										"validate-and-add"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Loads a list of all the licenses available in the store",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{vRSLCM_URL}}/lcm/locker/api/v2/licenses",
+									"host": [
+										"{{vRSLCM_URL}}"
+									],
+									"path": [
+										"lcm",
+										"locker",
+										"api",
+										"v2",
+										"licenses"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Refresh myvmware licenses",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{vRSLCM_URL}}/lcm/locker/api/v2/licenses/refresh",
+									"host": [
+										"{{vRSLCM_URL}}"
+									],
+									"path": [
+										"lcm",
+										"locker",
+										"api",
+										"v2",
+										"licenses",
+										"refresh"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Binaries",
+					"item": [
+						{
+							"name": "Get All My VMware binaries",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/lcops/api/v2/settings/my-vmware/product-binaries",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"lcops",
+										"api",
+										"v2",
+										"settings",
+										"my-vmware",
+										"product-binaries"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Download vIDM 3.3.6 Install Binary",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[{\r\n        \"productId\": \"vidm\",\r\n        \"productVersion\": \"3.3.6\",\r\n        \"productBinaryType\": \"Install\",\r\n        \"productBinaryPath\": null,\r\n        \"componentName\": null,\r\n        \"mappingType\": null,\r\n        \"productName\": \"VMware Identity Manager\",\r\n        \"requestId\": null,\r\n        \"removeBinary\": null\r\n}]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/lcops/api/v2/settings/my-vmware/product-binaries/download",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"lcops",
+										"api",
+										"v2",
+										"settings",
+										"my-vmware",
+										"product-binaries",
+										"download"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Download vRA 8.6.2 Install Binary",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n    {\r\n        \"productId\": \"vra\",\r\n        \"productVersion\": \"8.6.2\",\r\n        \"productBinaryType\": \"Install\",\r\n        \"productBinaryPath\": null,\r\n        \"componentName\": null,\r\n        \"mappingType\": null,\r\n        \"productName\": \"vRealize Automation\",\r\n        \"requestId\": null,\r\n        \"removeBinary\": null\r\n    }\r\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/lcops/api/v2/settings/my-vmware/product-binaries/download",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"lcops",
+										"api",
+										"v2",
+										"settings",
+										"my-vmware",
+										"product-binaries",
+										"download"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Download vRLI 8.6.2 Install Binary",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n    {\r\n        \"productId\": \"vrli\",\r\n        \"productVersion\": \"8.6.2\",\r\n        \"productBinaryType\": \"Install\",\r\n        \"productBinaryPath\": null,\r\n        \"componentName\": null,\r\n        \"mappingType\": null,\r\n        \"productName\": \"vRealize Log Insight\",\r\n        \"requestId\": null,\r\n        \"removeBinary\": null\r\n    }\r\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/lcops/api/v2/settings/my-vmware/product-binaries/download",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"lcops",
+										"api",
+										"v2",
+										"settings",
+										"my-vmware",
+										"product-binaries",
+										"download"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Download vRNI 6.5 Install Binary",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n    {\r\n        \"productId\": \"vrni\",\r\n        \"productVersion\": \"6.5.0\",\r\n        \"productBinaryType\": \"Install\",\r\n        \"productBinaryPath\": null,\r\n        \"componentName\": null,\r\n        \"mappingType\": null,\r\n        \"productName\": \"vRealize Network Insight\",\r\n        \"requestId\": null,\r\n        \"removeBinary\": null\r\n    }\r\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/lcops/api/v2/settings/my-vmware/product-binaries/download",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"lcops",
+										"api",
+										"v2",
+										"settings",
+										"my-vmware",
+										"product-binaries",
+										"download"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Download vROps 8.6.2 Install Binary",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[\r\n    {\r\n        \"productId\": \"vrops\",\r\n        \"productVersion\": \"8.6.2\",\r\n        \"productBinaryType\": \"Install\",\r\n        \"productBinaryPath\": null,\r\n        \"componentName\": null,\r\n        \"mappingType\": null,\r\n        \"productName\": \"vRealize Operations\",\r\n        \"requestId\": null,\r\n        \"removeBinary\": null\r\n    }\r\n]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/lcops/api/v2/settings/my-vmware/product-binaries/download",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"lcops",
+										"api",
+										"v2",
+										"settings",
+										"my-vmware",
+										"product-binaries",
+										"download"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Misc",
+					"item": [
+						{
+							"name": "Internal API - Delete Request",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{complex_password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{vrslcm_local_admin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/request/api/requests/ed1b27ba-c680-469e-ac86-d1c618eddc90",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"request",
+										"api",
+										"requests",
+										"ed1b27ba-c680-469e-ac86-d1c618eddc90"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Requests",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{complex_password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{vrslcm_local_admin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/request/api/v2/requests",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"request",
+										"api",
+										"v2",
+										"requests"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Environment",
+							"request": {
+								"auth": {
+									"type": "basic",
+									"basic": [
+										{
+											"key": "password",
+											"value": "{{complex_password}}",
+											"type": "string"
+										},
+										{
+											"key": "username",
+											"value": "{{vrslcm_local_admin}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"deleteFromInventory\": true,\r\n  \"deleteFromVcenter\": true,\r\n  \"deleteLbFromSddc\": true,\r\n  \"deleteWindowsVMs\": true\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{vrslcm_fqdn}}/lcm/lcops/api/environments/1b8596e3-8b3b-4971-9892-81920ae68acc/delete",
+									"protocol": "https",
+									"host": [
+										"{{vrslcm_fqdn}}"
+									],
+									"path": [
+										"lcm",
+										"lcops",
+										"api",
+										"environments",
+										"1b8596e3-8b3b-4971-9892-81920ae68acc",
+										"delete"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": " Get all Environments",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://{{vrslcm_fqdn}}/lcm/lcops/api/v2/environments",
+							"protocol": "https",
+							"host": [
+								"{{vrslcm_fqdn}}"
+							],
+							"path": [
+								"lcm",
+								"lcops",
+								"api",
+								"v2",
+								"environments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Trigger Inventory Sync for all Environments",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = JSON.parse(responseBody);",
+									"postman.setEnvironmentVariable(\"requestId\", jsonData.requestId);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://{{vrslcm_fqdn}}/lcm/lcops/api/v2/environments/inventory-sync",
+							"protocol": "https",
+							"host": [
+								"{{vrslcm_fqdn}}"
+							],
+							"path": [
+								"lcm",
+								"lcops",
+								"api",
+								"v2",
+								"environments",
+								"inventory-sync"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all Data Centers",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "https://{{vrslcm_fqdn}}/lcm/lcops/api/v2/datacenters",
+							"protocol": "https",
+							"host": [
+								"{{vrslcm_fqdn}}"
+							],
+							"path": [
+								"lcm",
+								"lcops",
+								"api",
+								"v2",
+								"datacenters"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": " Get all vCenters",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://{{vrslcm_fqdn}}/lcm/lcops/api/v2/datacenters/{{datacenter_vmid}}/vcenters",
+							"protocol": "https",
+							"host": [
+								"{{vrslcm_fqdn}}"
+							],
+							"path": [
+								"lcm",
+								"lcops",
+								"api",
+								"v2",
+								"datacenters",
+								"{{datacenter_vmid}}",
+								"vcenters"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "basic",
+				"basic": [
+					{
+						"key": "password",
+						"value": "{{complex_password}}",
+						"type": "string"
+					},
+					{
+						"key": "username",
+						"value": "{{vrslcm_local_admin}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "NSX-T",
+			"item": []
+		}
+	]
+}
