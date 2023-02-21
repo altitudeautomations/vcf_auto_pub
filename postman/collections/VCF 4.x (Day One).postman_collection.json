@@ -448,7 +448,7 @@
 							"response": []
 						},
 						{
-							"name": "(7) Deploy vRSLCM",
+							"name": "(10) Deploy vRSLCM",
 							"request": {
 								"method": "POST",
 								"header": [],
