@@ -1,4 +1,4 @@
-# automated_vcf_pub
+# Automated VCF Deployment (Public)
 
 Created/Managed by: Logan Spencer
 
