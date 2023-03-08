@@ -2,6 +2,6 @@
 
 Created/Managed by: Logan Spencer
 
-VRO Developer Ninja: Justus Howey
+VRO Overlord: Justus Howey
 
 Postman/Ansible Ninja: Jimmy Taylor
