@@ -1,0 +1,109 @@
+formatVersion: 1
+inputs:
+  vcfver:
+    type: string
+    title: VCF Version
+    oneOf:
+      - title: '4.4'
+        const: '44'
+      - title: '4.5'
+        const: '45'
+  isNested:
+    type: boolean
+    title: Is this a nested ESXi environment?
+    default: true
+  isProduction:
+    type: boolean
+    title: Is this a Production deployment?
+  propertyGroup:
+    type: object
+    title: propertyGroup
+    $ref: /ref/property-groups/altnestm1
+resources:
+  net_nest_tor1:
+    type: Cloud.vSphere.Network
+    metadata:
+      layoutPosition:
+        - 0
+        - 0
+    properties:
+      networkType: existing
+      constraints:
+        - tag: network:tor
+  net_nest_tor2:
+    type: Cloud.vSphere.Network
+    metadata:
+      layoutPosition:
+        - 1
+        - 0
+    properties:
+      networkType: existing
+      constraints:
+        - tag: network:tor
+  nest_esx:
+    type: Cloud.Machine
+    metadata:
+      layoutPosition:
+        - 2
+        - 1
+    properties:
+      nest: '${input.vcfver == "44" ? "m1" : "m2"}'
+      nestType: esx
+      image: '${input.vcfver == "44" ? "esx_vcf_loc_44" : "esx_vcf_loc_45"}'
+      flavor: vcf_nest_esxi
+      networks:
+        - network: ${resource.net_nest_tor2.id}
+          deviceIndex: 1
+        - network: ${resource.net_nest_tor1.id}
+          deviceIndex: 0
+      count: 4
+  net_nest_mgmt:
+    type: Cloud.vSphere.Network
+    metadata:
+      layoutPosition:
+        - 3
+        - 0
+    properties:
+      networkType: existing
+      constraints:
+        - tag: network:mgmt
+        - tag: env:oob
+  nest_vcb:
+    type: Cloud.Machine
+    metadata:
+      layoutPosition:
+        - 2
+        - 2
+    properties:
+      nest: '${input.vcfver == "44" ? "m1" : "m2"}'
+      nestOctet: '${input.vcfver == "44" ? "22" : "23"}'
+      nestType: vcb
+      image: '${input.vcfver == "44" ? "vcb_ovf_web_44" : "vcb_ovf_web_45"}'
+      ovfProperties:
+        - key: FIPS_ENABLE
+          value: 'False'
+        - key: guestinfo.ADMIN_PASSWORD
+          value: VMware123!
+        - key: guestinfo.ADMIN_USERNAME
+          value: admin
+        - key: guestinfo.DNS
+          value: 10.0.1.99,10.0.1.100
+        - key: guestinfo.domain
+          value: altitudeautomations.com
+        - key: guestinfo.gateway
+          value: 10.0.1.1
+        - key: guestinfo.hostname
+          value: ${"altnest-" + resource.nest_vcb.nest + "-vcb"}
+        - key: guestinfo.ip0
+          value: ${"10.0.1." + resource.nest_vcb.nestOctet}
+        - key: guestinfo.netmask0
+          value: 255.255.255.0
+        - key: guestinfo.ntp
+          value: pool.ntp.org,north-america.pool.ntp.org
+        - key: guestinfo.ROOT_PASSWORD
+          value: VMware123!
+        - key: guestinfo.searchpath
+          value: altitudeautomations.com
+      flavor: cloudbuilder_ovf
+      networks:
+        - network: ${resource.net_nest_mgmt.id}
