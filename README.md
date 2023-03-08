@@ -2,6 +2,6 @@
 
 Created/Managed/Lorded Over by: Logan Spencer
 
-VRO Overlord: Justus Howey
+VRO Supreme Commander: Justus Howey
 
 Ansible Ninja: Jimmy Taylor
