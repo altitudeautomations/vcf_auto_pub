@@ -1,7 +1,7 @@
 # Automated VCF Deployment (Public)
 
-Created/Managed by: Logan Spencer
+Created/Managed/Lorded Over by: Logan Spencer
 
 VRO Overlord: Justus Howey
 
-Postman/Ansible Ninja: Jimmy Taylor
+Ansible Ninja: Jimmy Taylor
