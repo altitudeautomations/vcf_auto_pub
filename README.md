@@ -1,6 +1,6 @@
 # Automated VCF Deployment (Public)
 
-Created/Managed/Lorded Over by: Logan Spencer
+Created/Managed by: Logan Spencer
 
 VRO Supreme Commander: Justus Howey
 
